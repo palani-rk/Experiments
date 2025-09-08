@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Flutter
+flutter_mockup_test/.dart_tool/
+flutter_mockup_test/.packages
+flutter_mockup_test/.pub-cache/
+flutter_mockup_test/.pub/
+flutter_mockup_test/build/
+flutter_mockup_test/.flutter-plugins
+flutter_mockup_test/.flutter-plugins-dependencies
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs and crash dumps
+*.log
+*.stackdump
+
+# Temporary files
+*.tmp
+*.temp
+
+# Cache directories
+.cache/
+.superdesign/cache/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

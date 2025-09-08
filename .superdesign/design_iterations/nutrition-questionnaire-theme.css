@@ -1,0 +1,252 @@
+/* Nutrition Questionnaire Theme */
+/* Professional health-focused theme with warm, approachable colors */
+
+:root {
+  /* Primary Colors - Deep forest green for trust and health */
+  --primary: #2D5B4A;
+  --primary-foreground: #FFFFFF;
+  --primary-light: #4A7C59;
+  --primary-lighter: #6B9A73;
+
+  /* Secondary Colors - Soft green for warmth */
+  --secondary: #E8F5E8;
+  --secondary-foreground: #2D5B4A;
+  --secondary-dark: #D4E9D4;
+
+  /* Accent Colors */
+  --accent: #4A7C59;
+  --accent-foreground: #FFFFFF;
+  --accent-light: #7BA882;
+
+  /* Background Colors */
+  --background: #FAFAFA;
+  --foreground: #1A1A1A;
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+
+  /* Border & Input Colors */
+  --border: #E0E0E0;
+  --border-light: #F0F0F0;
+  --input: #F8F8F8;
+  --input-border: #D1D5DB;
+  --input-focus: #4A7C59;
+
+  /* Muted Colors */
+  --muted: #F5F5F5;
+  --muted-foreground: #6B7280;
+  --muted-dark: #9CA3AF;
+
+  /* Status Colors */
+  --success: #22C55E;
+  --success-light: #DCFCE7;
+  --warning: #F59E0B;
+  --warning-light: #FEF3C7;
+  --destructive: #EF4444;
+  --destructive-light: #FEE2E2;
+
+  /* Chat-specific Colors */
+  --chat-bot-bg: #F0F9F0;
+  --chat-user-bg: #E8F4FD;
+  --chat-current-bg: #FFF7ED;
+  --chat-current-border: #FB923C;
+  --chat-section-bg: #F8FAFC;
+  --chat-section-border: #CBD5E1;
+
+  /* Progress Colors */
+  --progress-bg: #E5E7EB;
+  --progress-fill: #4A7C59;
+  --progress-text: #374151;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: Georgia, Cambria, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-card: 0 2px 8px 0 rgb(0 0 0 / 0.08);
+  --shadow-focus: 0 0 0 3px rgb(74 124 89 / 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Typography */
+body {
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-base) !important;
+  line-height: var(--leading-normal) !important;
+  color: var(--foreground) !important;
+  background-color: var(--background) !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+  line-height: var(--leading-tight) !important;
+  color: var(--foreground) !important;
+}
+
+h1 { font-size: var(--text-3xl) !important; }
+h2 { font-size: var(--text-2xl) !important; }
+h3 { font-size: var(--text-xl) !important; }
+h4 { font-size: var(--text-lg) !important; }
+
+/* Component-specific styles */
+.questionnaire-header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-bar {
+  background: var(--progress-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, var(--progress-fill), var(--primary-light));
+  transition: width var(--transition-normal);
+}
+
+.chat-container {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.chat-message-bot {
+  background: var(--chat-bot-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--secondary-dark);
+}
+
+.chat-message-user {
+  background: var(--chat-user-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid #BFDBFE;
+}
+
+.chat-section {
+  background: var(--chat-section-bg);
+  border: 2px solid var(--chat-section-border);
+  border-radius: var(--radius-xl);
+  margin: var(--spacing-lg) 0;
+}
+
+.chat-current-question {
+  background: var(--chat-current-bg);
+  border: 2px solid var(--chat-current-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.input-field {
+  background: var(--input);
+  border: 2px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: var(--font-sans);
+  transition: all var(--transition-fast);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: var(--shadow-focus);
+  background: var(--card);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border: 1px solid var(--secondary-dark);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.edit-button {
+  background: transparent;
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--text-xs);
+  transition: all var(--transition-fast);
+}
+
+.edit-button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.completion-message {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  font-weight: 500;
+  text-align: center;
+}

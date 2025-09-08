@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Plan Questionnaire</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="nutrition-questionnaire-theme.css">
+    
+    <style>
+        /* Animation Keyframes */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.2; }
+            30% { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        /* Animation Classes */
+        .animate-slide-up { animation: slideUpFade 0.4s ease-out; }
+        .animate-bounce-once { animation: bounce 0.8s ease-out; }
+        .animate-shake { animation: shake 0.3s ease-in-out; }
+        .animate-typing { animation: typing 1.4s infinite; }
+        .animate-pulse-subtle { animation: pulse 2s infinite; }
+        
+        /* Typing Indicator */
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--muted-foreground);
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* Current Question Highlight */
+        .current-question {
+            position: relative;
+            background: var(--chat-current-bg) !important;
+            border: 2px solid var(--chat-current-border) !important;
+            box-shadow: 0 4px 12px rgba(251, 146, 60, 0.15) !important;
+        }
+        
+        .current-question::before {
+            content: 'CURRENT';
+            position: absolute;
+            top: -8px;
+            right: 16px;
+            background: var(--chat-current-border);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Section Grouping */
+        .section-group {
+            background: var(--chat-section-bg);
+            border: 2px solid var(--chat-section-border);
+            border-radius: var(--radius-xl);
+            margin: var(--spacing-lg) 0;
+            padding: var(--spacing-lg);
+            position: relative;
+        }
+        
+        .section-header {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--background);
+            padding: 0 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+        
+        /* Progress Bar Custom Styling */
+        .progress-container {
+            background: var(--progress-bg);
+            border-radius: var(--radius-lg);
+            height: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            height: 100%;
+            border-radius: var(--radius-lg);
+            transition: width 0.5s ease-out;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Custom Button Styles */
+        .btn-submit {
+            background: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-submit:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(45, 91, 74, 0.25);
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Edit Button */
+        .edit-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .edit-btn:hover {
+            background: var(--accent);
+            color: var(--accent-foreground);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+        
+        /* Input Styling */
+        .form-input {
+            background: var(--input);
+            border: 2px solid var(--input-border);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            background: var(--card);
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+        
+        .form-input.valid {
+            border-color: var(--success);
+        }
+        
+        .form-input.invalid {
+            border-color: var(--destructive);
+            animation: shake 0.3s ease-in-out;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 640px) {
+            .chat-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .section-group {
+                margin: var(--spacing-md) 0;
+                padding: var(--spacing-md);
+            }
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="questionnaire-header bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <div class="text-center">
+                <!-- Clinic Logo Placeholder -->
+                <div class="w-16 h-16 bg-emerald-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <i data-lucide="heart-pulse" class="w-8 h-8 text-emerald-600"></i>
+                </div>
+                <h1 class="text-2xl font-semibold text-gray-900">Wellness Nutrition Clinic</h1>
+                <p class="text-gray-600 mt-2">Nutrition Plan Questionnaire</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="max-w-4xl mx-auto px-4 py-4">
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700">Personal Info</span>
+                <span class="text-sm text-gray-500">25% Complete</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-fill" style="width: 25%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chat Container -->
+    <div class="max-w-4xl mx-auto px-4 pb-8">
+        <div class="chat-container bg-white rounded-lg shadow-sm min-h-[600px] flex flex-col">
+            <!-- Chat Messages Area -->
+            <div class="flex-1 p-6 space-y-4 overflow-y-auto" id="chatMessages">
+                
+                <!-- Welcome Message -->
+                <div class="flex items-start gap-3 animate-slide-up">
+                    <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <div class="chat-message-bot bg-green-50 border border-green-200 rounded-lg p-4 max-w-md">
+                        <p class="text-gray-800">Hi Sarah! 👋 I'm here to help <strong>Dr. Smith</strong> create the perfect nutrition plan for you.</p>
+                    </div>
+                </div>
+
+                <!-- Info Message -->
+                <div class="flex items-start gap-3 animate-slide-up" style="animation-delay: 0.2s">
+                    <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <div class="chat-message-bot bg-green-50 border border-green-200 rounded-lg p-4 max-w-lg">
+                        <p class="text-gray-800 mb-3">This will take just 5-10 minutes and covers 4 areas:</p>
+                        <ul class="space-y-1 text-gray-700">
+                            <li>• Personal Info (2 mins)</li>
+                            <li>• Your Goals (2 mins)</li>
+                            <li>• Health Background (3 mins)</li>
+                            <li>• Lifestyle (3 mins)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Ready Question -->
+                <div class="flex items-start gap-3 animate-slide-up" style="animation-delay: 0.4s">
+                    <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <div class="chat-message-bot bg-green-50 border border-green-200 rounded-lg p-4 max-w-md">
+                        <p class="text-gray-800">Ready to get started?</p>
+                    </div>
+                </div>
+
+                <!-- User Response -->
+                <div class="flex items-start gap-3 justify-end animate-slide-up" style="animation-delay: 0.6s">
+                    <div class="chat-message-user bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md">
+                        <p class="text-gray-800">Yes, let's do this!</p>
+                        <button class="edit-btn mt-2">
+                            <i data-lucide="edit-2" class="w-3 h-3"></i>
+                            Edit
+                        </button>
+                    </div>
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="user" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                </div>
+
+                <!-- Personal Info Section -->
+                <div class="section-group animate-slide-up" style="animation-delay: 0.8s">
+                    <div class="section-header">PERSONAL INFO</div>
+                    
+                    <!-- Name Question -->
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                        </div>
+                        <div class="chat-message-bot bg-green-50 border border-green-200 rounded-lg p-4 max-w-md">
+                            <p class="text-gray-800">What's your full name?</p>
+                        </div>
+                    </div>
+
+                    <!-- Name Response -->
+                    <div class="flex items-start gap-3 justify-end mb-4">
+                        <div class="chat-message-user bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md">
+                            <p class="text-gray-800">Sarah Johnson</p>
+                            <button class="edit-btn mt-2">
+                                <i data-lucide="edit-2" class="w-3 h-3"></i>
+                                Edit
+                            </button>
+                        </div>
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="user" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                    </div>
+
+                    <!-- Age Question -->
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                        </div>
+                        <div class="chat-message-bot bg-green-50 border border-green-200 rounded-lg p-4 max-w-md">
+                            <p class="text-gray-800">How old are you?</p>
+                        </div>
+                    </div>
+
+                    <!-- Age Response -->
+                    <div class="flex items-start gap-3 justify-end mb-4">
+                        <div class="chat-message-user bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md">
+                            <p class="text-gray-800">28 years old</p>
+                            <button class="edit-btn mt-2">
+                                <i data-lucide="edit-2" class="w-3 h-3"></i>
+                                Edit
+                            </button>
+                        </div>
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="user" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                    </div>
+
+                    <!-- Weight Question -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                        </div>
+                        <div class="chat-message-bot bg-green-50 border border-green-200 rounded-lg p-4 max-w-md">
+                            <p class="text-gray-800">What's your current weight?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Question - Height -->
+                <div class="flex items-start gap-3 current-question rounded-lg p-4 animate-slide-up">
+                    <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-gray-800 mb-4">And your height?</p>
+                        
+                        <!-- Input Form -->
+                        <div class="flex gap-3 max-w-md">
+                            <div class="flex-1">
+                                <input type="number" class="form-input" placeholder="5" min="3" max="8" id="heightFeet">
+                                <label class="text-xs text-gray-500 mt-1 block">feet</label>
+                            </div>
+                            <div class="flex-1">
+                                <input type="number" class="form-input" placeholder="7" min="0" max="11" id="heightInches">
+                                <label class="text-xs text-gray-500 mt-1 block">inches</label>
+                            </div>
+                            <button class="btn-submit" id="submitHeight" disabled>
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Typing Indicator (Hidden by default) -->
+                <div class="flex items-start gap-3 hidden" id="typingIndicator">
+                    <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <div class="chat-message-bot bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Form validation and interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            const feetInput = document.getElementById('heightFeet');
+            const inchesInput = document.getElementById('heightInches');
+            const submitBtn = document.getElementById('submitHeight');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const chatMessages = document.getElementById('chatMessages');
+
+            // Validate height inputs
+            function validateHeight() {
+                const feet = feetInput.value;
+                const inches = inchesInput.value;
+                const isValid = feet && inches !== '' && feet >= 3 && feet <= 8 && inches >= 0 && inches <= 11;
+                
+                submitBtn.disabled = !isValid;
+                
+                if (isValid) {
+                    feetInput.classList.add('valid');
+                    inchesInput.classList.add('valid');
+                } else {
+                    feetInput.classList.remove('valid');
+                    inchesInput.classList.remove('valid');
+                }
+            }
+
+            // Add input event listeners
+            feetInput.addEventListener('input', validateHeight);
+            inchesInput.addEventListener('input', validateHeight);
+
+            // Handle form submission
+            submitBtn.addEventListener('click', function() {
+                if (!submitBtn.disabled) {
+                    const feet = feetInput.value;
+                    const inches = inchesInput.value;
+                    
+                    // Remove current question styling
+                    document.querySelector('.current-question').classList.remove('current-question');
+                    
+                    // Add user response
+                    const userResponse = document.createElement('div');
+                    userResponse.className = 'flex items-start gap-3 justify-end animate-slide-up';
+                    userResponse.innerHTML = `
+                        <div class="chat-message-user bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md">
+                            <p class="text-gray-800">${feet}'${inches}" tall</p>
+                            <button class="edit-btn mt-2">
+                                <i data-lucide="edit-2" class="w-3 h-3"></i>
+                                Edit
+                            </button>
+                        </div>
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="user" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                    `;
+                    
+                    // Show typing indicator
+                    typingIndicator.classList.remove('hidden');
+                    chatMessages.appendChild(userResponse);
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Reinitialize icons
+                    lucide.createIcons();
+                    
+                    // Simulate next question after delay
+                    setTimeout(() => {
+                        typingIndicator.classList.add('hidden');
+                        
+                        // Add section completion message
+                        const completionMessage = document.createElement('div');
+                        completionMessage.className = 'completion-message animate-bounce-once';
+                        completionMessage.innerHTML = `
+                            <div class="flex items-center justify-center gap-2">
+                                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                                <span>Great! Personal info complete ✅ Now let's talk about what you want to achieve 💪</span>
+                            </div>
+                        `;
+                        
+                        chatMessages.appendChild(completionMessage);
+                        lucide.createIcons();
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 2000);
+                }
+            });
+
+            // Handle edit buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.edit-btn')) {
+                    // Highlight the message for editing
+                    const message = e.target.closest('.chat-message-user, .chat-message-bot');
+                    message.style.outline = '2px solid var(--accent)';
+                    message.style.outlineOffset = '2px';
+                    
+                    setTimeout(() => {
+                        message.style.outline = '';
+                        message.style.outlineOffset = '';
+                    }, 1500);
+                }
+            });
+
+            // Auto-focus first input on load
+            feetInput.focus();
+        });
+    </script>
+</body>
+</html>
