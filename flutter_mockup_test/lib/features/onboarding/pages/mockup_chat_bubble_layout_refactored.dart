@@ -1,7 +1,7 @@
 // Chat Bubble Layout - Refactored with Component Architecture
 import 'package:flutter/material.dart';
 import 'chat_widgets.dart';
-import 'theme.dart';
+import 'shared/theme/app_theme.dart';
 
 class ClientOnboardingChatLayout extends StatefulWidget {
   @override

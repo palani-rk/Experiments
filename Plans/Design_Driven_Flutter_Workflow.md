@@ -6,9 +6,9 @@ A comprehensive workflow for building Flutter apps using a user-centered, design
 
 This workflow follows a 4-phase approach:
 1. **Discovery & Wireframing** - Define user flows and create ASCII wireframes
-2. **Component Selection** - Generate and compare Material 3 components
+2. **Component Selection** - Generate and compare Flutter Material 3 components
 3. **State Management & Testing** - Implement Riverpod architecture with integration tests
-4. **API Integration** - Design and integrate REST APIs
+4. **API Integration** - Integrate with backend REST APIs
 
 ## 📋 **Phase-by-Phase Implementation**
 
@@ -94,7 +94,7 @@ This workflow follows a 4-phase approach:
 - Information architecture diagrams
 - Navigation flow documentation
 
-**Output File:** `Plans/Wireframes_Architecture.md`
+**Output File:** `Plans/Designs/Wireframes_Architecture.md`
 
 **Expected Markdown Structure:**
 ```markdown

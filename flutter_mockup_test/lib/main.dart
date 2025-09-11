@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'mockup_card_based_layout.dart';
 import 'mockup_chat_bubble_layout.dart';
-import 'mockup_chat_bubble_layout_refactored.dart' as refactored;
 import 'mockup_list_based_layout.dart';
-import 'theme.dart';
+import 'shared/theme/app_theme.dart';
+import 'features/onboarding/presentation/pages/questionnaire_page.dart';
 
 void main() {
-  runApp(const MockupTestApp());
+  runApp(const ProviderScope(
+    child: MockupTestApp(),
+  ));
 }
 
 class MockupTestApp extends StatelessWidget {
@@ -74,19 +77,6 @@ class MockupSelectionScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _buildMockupCard(
               context,
-              'Chat Bubble Layout (Refactored)',
-              'Component-based architecture',
-              Icons.architecture,
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => refactored.ClientOnboardingChatLayout(),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            _buildMockupCard(
-              context,
               'List-Based Layout',
               'Compact, data-focused design',
               Icons.list,
@@ -94,6 +84,19 @@ class MockupSelectionScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ClientOnboardingListLayout(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildMockupCard(
+              context,
+              'Clean Architecture Questionnaire',
+              'Riverpod + Freezed + Clean Architecture',
+              Icons.architecture_outlined,
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const QuestionnairePage(),
                 ),
               ),
             ),
