@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nutriapp.com/schemas/questionnaire.json",
+  "title": "NutriApp Chat-based Questionnaire Schema",
+  "description": "JSON schema for NutriApp onboarding questionnaire data structure",
+  "type": "object",
+  "required": ["metadata", "intro", "sections"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["id", "title", "version", "createdAt"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the questionnaire"
+        },
+        "title": {
+          "type": "string",
+          "description": "Display title for the questionnaire"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+          "description": "Semantic version of the questionnaire"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of the questionnaire"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when questionnaire was created"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author or organization that created the questionnaire"
+        },
+        "estimatedDuration": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Estimated completion time in minutes"
+        }
+      }
+    },
+    "intro": {
+      "$ref": "#/$defs/introSection"
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/questionnaireSection"
+      }
+    }
+  },
+  "$defs": {
+    "introSection": {
+      "type": "object",
+      "required": ["id", "title", "welcomeMessages", "sectionType", "status", "createdAt"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique section identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Section title"
+        },
+        "welcomeMessages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/botMessage"
+          }
+        },
+        "sectionType": {
+          "type": "string",
+          "enum": ["intro"],
+          "description": "Must be 'intro' for introduction sections"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "inProgress", "completed", "skipped"],
+          "default": "completed"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "questionnaireSection": {
+      "type": "object",
+      "required": ["id", "title", "description", "questions", "sectionType", "status", "createdAt"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique section identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Section title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Section description"
+        },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/question"
+          }
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sectionMessage"
+          },
+          "default": []
+        },
+        "sectionType": {
+          "type": "string",
+          "enum": ["questionnaire"],
+          "description": "Must be 'questionnaire' for question sections"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "inProgress", "completed", "skipped"],
+          "default": "pending"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["id", "sectionId", "text", "inputType", "required", "order"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique question identifier"
+        },
+        "sectionId": {
+          "type": "string",
+          "description": "ID of the section this question belongs to"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Question text to display"
+        },
+        "inputType": {
+          "type": "string",
+          "enum": ["text", "number", "email", "phone", "date", "radio", "multiselect", "slider", "scale", "boolean"],
+          "description": "Type of input control to use"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this question is required"
+        },
+        "hint": {
+          "type": "string",
+          "description": "Optional hint text for the user"
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Placeholder text for input fields"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Available options for radio/multiselect questions"
+        },
+        "validation": {
+          "type": "object",
+          "description": "Validation rules specific to the question type",
+          "properties": {
+            "maxLength": { "type": "integer", "minimum": 1 },
+            "minLength": { "type": "integer", "minimum": 0 },
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "decimals": { "type": "integer", "minimum": 0 },
+            "minDate": { "type": "string", "format": "date" },
+            "maxDate": { "type": "string", "format": "date" },
+            "minSelections": { "type": "integer", "minimum": 0 },
+            "maxSelections": { "type": "integer", "minimum": 1 },
+            "step": { "type": "number", "minimum": 0.01 },
+            "pattern": { "type": "string" },
+            "allowedDomains": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional metadata for the question",
+          "properties": {
+            "category": { "type": "string" },
+            "tags": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "conditional": {
+              "type": "object",
+              "properties": {
+                "dependsOn": { "type": "string" },
+                "showWhen": { "type": "string" },
+                "hideWhen": { "type": "string" }
+              }
+            }
+          }
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Display order within the section"
+        }
+      }
+    },
+    "botMessage": {
+      "type": "object",
+      "required": ["id", "sectionId", "content", "messageType", "timestamp"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique message identifier"
+        },
+        "sectionId": {
+          "type": "string",
+          "description": "Section this message belongs to"
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Message content"
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["botIntro", "botInfo", "botQuestion", "botWrapup", "systemInfo"],
+          "description": "Type of bot message"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the message was created"
+        },
+        "isEditable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this message can be edited"
+        },
+        "context": {
+          "type": "string",
+          "description": "Additional context for the message"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional message metadata"
+        }
+      }
+    },
+    "sectionMessage": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/botMessage"
+        },
+        {
+          "$ref": "#/$defs/questionAnswer"
+        }
+      ]
+    },
+    "questionAnswer": {
+      "type": "object",
+      "required": ["id", "sectionId", "questionId", "questionText", "inputType", "answer", "timestamp"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique message identifier"
+        },
+        "sectionId": {
+          "type": "string",
+          "description": "Section this message belongs to"
+        },
+        "questionId": {
+          "type": "string",
+          "description": "ID of the question being answered"
+        },
+        "questionText": {
+          "type": "string",
+          "description": "Text of the question"
+        },
+        "inputType": {
+          "type": "string",
+          "enum": ["text", "number", "email", "phone", "date", "radio", "multiselect", "slider", "scale", "boolean"]
+        },
+        "answer": {
+          "description": "The user's answer (type varies by input type)"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["userAnswer"],
+          "default": "userAnswer"
+        },
+        "isEditable": {
+          "type": "boolean",
+          "default": true
+        },
+        "formattedAnswer": {
+          "type": "string",
+          "description": "Human-readable formatted version of the answer"
+        },
+        "validation": {
+          "type": "object",
+          "description": "Validation status for this answer"
+        },
+        "questionMetadata": {
+          "type": "object",
+          "description": "Metadata from the original question"
+        }
+      }
+    }
+  }
+}
