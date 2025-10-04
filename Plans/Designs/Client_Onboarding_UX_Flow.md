@@ -3,6 +3,11 @@
 ## Design Overview
 Conversational chat interface with progressive disclosure, section grouping, and inline editing capabilities. One active question at a time with clean visual organization of completed responses.
 
+Page flow:
+1. Welcome Screen
+2. Questionnaire FLow
+3. Completion Flow
+
 ## Layout Structure
 
 ### Header Section

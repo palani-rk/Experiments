@@ -19,6 +19,7 @@ sealed class SectionMessage with _$SectionMessage {
     required MessageType messageType,
     required DateTime timestamp,
     @Default(false) bool isEditable,
+    @Default(0) int order,
     String? context,
     Map<String, dynamic>? metadata,
   }) = BotMessage;
@@ -34,6 +35,8 @@ sealed class SectionMessage with _$SectionMessage {
     required DateTime timestamp,
     @Default(MessageType.userAnswer) MessageType messageType,
     @Default(true) bool isEditable,
+    @Default(false) bool isComplete,
+    @Default(0) int order,
     String? formattedAnswer,
     ValidationStatus? validation,
     Map<String, dynamic>? questionMetadata,

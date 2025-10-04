@@ -19,6 +19,7 @@ sealed class ChatSection with _$ChatSection {
     required List<BotMessage> welcomeMessages,
     @Default(SectionType.intro) SectionType sectionType,
     @Default(SectionStatus.completed) SectionStatus status,
+    @Default(0) int order,
     required DateTime createdAt,
     DateTime? completedAt,
   }) = IntroSection;
@@ -32,6 +33,7 @@ sealed class ChatSection with _$ChatSection {
     @Default([]) List<SectionMessage> messages,
     @Default(SectionType.questionnaire) SectionType sectionType,
     @Default(SectionStatus.pending) SectionStatus status,
+    @Default(0) int order,
     required DateTime createdAt,
     DateTime? completedAt,
   }) = QuestionnaireSection;

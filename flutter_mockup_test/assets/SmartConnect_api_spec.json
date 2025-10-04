@@ -1,0 +1,5987 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns welcome message"
+          }
+        },
+        "summary": "Get welcome message",
+        "tags": [
+          "Root"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Health check endpoint",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "description": "Authenticate user with email and password",
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User login credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials or validation errors"
+          },
+          "429": {
+            "description": "Too many login attempts"
+          }
+        },
+        "summary": "User login",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "description": "Generate new access and refresh tokens using a valid refresh token",
+        "operationId": "AuthController_refreshTokens",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Valid refresh token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "description": "New JWT access token"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "description": "New refresh token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired refresh token"
+          },
+          "429": {
+            "description": "Too many refresh attempts"
+          }
+        },
+        "summary": "Refresh access token",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "description": "Logout user by invalidating their refresh token",
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Logout successful"
+          },
+          "400": {
+            "description": "User ID not found"
+          },
+          "401": {
+            "description": "Invalid or missing authentication token"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "User logout",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "description": "Retrieve authenticated user profile information",
+        "operationId": "AuthController_getProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User ID not found"
+          },
+          "401": {
+            "description": "Invalid or missing authentication token"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user profile",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/organizations": {
+      "post": {
+        "description": "Create a new organization (Super Admin only)",
+        "operationId": "OrganizationController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrganizationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Organization created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or validation errors"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Super admin access required"
+          },
+          "409": {
+            "description": "Organization with subdomain already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create organization",
+        "tags": [
+          "Organizations"
+        ]
+      },
+      "get": {
+        "description": "Retrieve a paginated list of all organizations (Super Admin only)",
+        "operationId": "OrganizationController_findAll",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page (default: 10, max: 100)",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (default: 1)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organizations retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Super admin access required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all organizations",
+        "tags": [
+          "Organizations"
+        ]
+      }
+    },
+    "/api/organizations/{id}": {
+      "get": {
+        "description": "Retrieve detailed information about a specific organization (Super Admin only)",
+        "operationId": "OrganizationController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Organization UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Super admin access required"
+          },
+          "404": {
+            "description": "Organization not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get organization details",
+        "tags": [
+          "Organizations"
+        ]
+      },
+      "put": {
+        "description": "Update an existing organization (Super Admin only)",
+        "operationId": "OrganizationController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Organization UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrganizationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Organization updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or validation errors"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Super admin access required"
+          },
+          "404": {
+            "description": "Organization not found"
+          },
+          "409": {
+            "description": "Organization with subdomain already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update organization",
+        "tags": [
+          "Organizations"
+        ]
+      },
+      "delete": {
+        "description": "Delete an organization (Super Admin only). Organization must have no users.",
+        "operationId": "OrganizationController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Organization UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Organization deleted successfully"
+          },
+          "400": {
+            "description": "Cannot delete organization with existing users"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Super admin access required"
+          },
+          "404": {
+            "description": "Organization not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete organization",
+        "tags": [
+          "Organizations"
+        ]
+      }
+    },
+    "/api/users": {
+      "post": {
+        "description": "Create a new user. Super Admin can create any role, Org Admin can create ORG_ADMIN, ORG_USER and CLIENT roles within their organization.",
+        "operationId": "UserController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data, validation errors, or organization not found"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Insufficient permissions or role restrictions"
+          },
+          "409": {
+            "description": "User with email already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "description": "Retrieve a paginated list of users. Super Admin can see all users or filter by organization. Org Admin can only see users from their organization.",
+        "operationId": "UserController_findAll",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by organization ID (Super Admin only)",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page (default: 10, max: 100)",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (default: 1)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Insufficient permissions to list users"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List users",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "description": "Retrieve detailed information about a specific user. Access is organization-scoped for non-super admins.",
+        "operationId": "UserController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Insufficient permissions or cross-organization access denied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user details",
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "description": "Update an existing user. Access is organization-scoped for non-super admins. Role changes are restricted based on requesting user permissions.",
+        "operationId": "UserController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data, validation errors, or organization not found"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Insufficient permissions, role restrictions, or cross-organization access denied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "description": "Soft delete a user by setting status to INACTIVE. Access is organization-scoped for non-super admins.",
+        "operationId": "UserController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deactivated successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Insufficient permissions or cross-organization access denied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete/Deactivate user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/channels": {
+      "post": {
+        "description": "Create a new channel (Org Admin only)",
+        "operationId": "ChannelController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChannelDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Channel created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or validation errors"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Org admin access required"
+          },
+          "409": {
+            "description": "Channel with name already exists in organization"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create channel",
+        "tags": [
+          "Channels"
+        ]
+      },
+      "get": {
+        "description": "List channels (Admin: all org channels, User: only member channels)",
+        "operationId": "ChannelController_findAll",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page (default: 10, max: 100)",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (default: 1)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Channels retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List channels",
+        "tags": [
+          "Channels"
+        ]
+      }
+    },
+    "/api/channels/{id}": {
+      "get": {
+        "description": "Get channel details (Admin: any org channel, User: only if member)",
+        "operationId": "ChannelController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Channel details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied to this channel"
+          },
+          "404": {
+            "description": "Channel not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get channel details",
+        "tags": [
+          "Channels"
+        ]
+      },
+      "put": {
+        "description": "Update an existing channel (Org Admin only)",
+        "operationId": "ChannelController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateChannelDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Channel updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or validation errors"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Org admin access required"
+          },
+          "404": {
+            "description": "Channel not found"
+          },
+          "409": {
+            "description": "Channel with name already exists in organization"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update channel",
+        "tags": [
+          "Channels"
+        ]
+      },
+      "delete": {
+        "description": "Delete/archive a channel (Org Admin only)",
+        "operationId": "ChannelController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Channel deleted successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Org admin access required"
+          },
+          "404": {
+            "description": "Channel not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete channel",
+        "tags": [
+          "Channels"
+        ]
+      }
+    },
+    "/api/channels/{id}/users": {
+      "post": {
+        "description": "Add users to a channel (Org Admin only)",
+        "operationId": "ChannelController_addUsers",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUsersToChannelDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Users added to channel successfully"
+          },
+          "400": {
+            "description": "Invalid input data or users not found in organization"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Org admin access required"
+          },
+          "404": {
+            "description": "Channel not found"
+          },
+          "409": {
+            "description": "One or more users are already members of this channel"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add users to channel",
+        "tags": [
+          "Channels"
+        ]
+      },
+      "get": {
+        "description": "Get list of channel members (Admin and channel members only)",
+        "operationId": "ChannelController_getMembers",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Channel members retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChannelMembershipDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied to this channel"
+          },
+          "404": {
+            "description": "Channel not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List channel members",
+        "tags": [
+          "Channels"
+        ]
+      }
+    },
+    "/api/channels/{id}/users/{userId}": {
+      "delete": {
+        "description": "Remove a user from a channel (Org Admin only)",
+        "operationId": "ChannelController_removeUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "description": "User UUID to remove",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User removed from channel successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Org admin access required"
+          },
+          "404": {
+            "description": "Channel or user not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove user from channel",
+        "tags": [
+          "Channels"
+        ]
+      }
+    },
+    "/api/channels/{id}/messages": {
+      "post": {
+        "description": "Send a new message to a channel (Channel members only)",
+        "operationId": "ChannelMessageController_sendMessage",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or validation errors"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Channel membership required"
+          },
+          "404": {
+            "description": "Channel not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Send message to channel",
+        "tags": [
+          "Channel Messages"
+        ]
+      },
+      "get": {
+        "description": "Get messages from a channel with pagination (Channel members only)",
+        "operationId": "ChannelMessageController_getMessages",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "reactionsLimit",
+            "required": false,
+            "in": "query",
+            "description": "Maximum number of reactions per message when includeReactions=true (default: 5, max: 10)",
+            "schema": {
+              "example": 5,
+              "type": "number"
+            }
+          },
+          {
+            "name": "includeReactions",
+            "required": false,
+            "in": "query",
+            "description": "Include reaction data with messages (default: false)",
+            "schema": {
+              "example": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page (default: 20, max: 100)",
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (default: 1)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Channel membership required"
+          },
+          "404": {
+            "description": "Channel not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get channel messages",
+        "tags": [
+          "Channel Messages"
+        ]
+      }
+    },
+    "/api/channels/{id}/messages/{messageId}": {
+      "get": {
+        "description": "Get a specific message from a channel (Channel members only)",
+        "operationId": "ChannelMessageController_getMessage",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageId",
+            "required": true,
+            "in": "path",
+            "description": "Message UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "reactionsLimit",
+            "required": false,
+            "in": "query",
+            "description": "Maximum number of reactions when includeReactions=true (default: 10, max: 10)",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "includeReactions",
+            "required": false,
+            "in": "query",
+            "description": "Include reaction data with the message (default: false)",
+            "schema": {
+              "example": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Channel membership required"
+          },
+          "404": {
+            "description": "Channel or message not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get single channel message",
+        "tags": [
+          "Channel Messages"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/messages/{messageId}/reactions": {
+      "post": {
+        "description": "Add a reaction to a message (Channel members only)",
+        "operationId": "MessageReactionsController_addReaction",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageId",
+            "required": true,
+            "in": "path",
+            "description": "Message UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reaction added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReactionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or reaction type"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied to this channel"
+          },
+          "404": {
+            "description": "Channel or message not found"
+          },
+          "409": {
+            "description": "You have already reacted with this reaction type"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add reaction to message",
+        "tags": [
+          "Message Reactions"
+        ]
+      },
+      "get": {
+        "description": "Get all reactions for a message with counts and user's reaction status",
+        "operationId": "MessageReactionsController_getMessageReactions",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageId",
+            "required": true,
+            "in": "path",
+            "description": "Message UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message reactions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageReactionsResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied to this channel"
+          },
+          "404": {
+            "description": "Channel or message not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get message reactions",
+        "tags": [
+          "Message Reactions"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/messages/{messageId}/reactions/{reactionType}": {
+      "delete": {
+        "description": "Remove a specific reaction type from a message (Channel members only)",
+        "operationId": "MessageReactionsController_removeReaction",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageId",
+            "required": true,
+            "in": "path",
+            "description": "Message UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "reactionType",
+            "required": true,
+            "in": "path",
+            "description": "Type of reaction to remove",
+            "schema": {
+              "$ref": "#/components/schemas/ReactionType"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Reaction removed successfully"
+          },
+          "400": {
+            "description": "Invalid reaction type"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied to this channel"
+          },
+          "404": {
+            "description": "Channel, message, or reaction not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove reaction from message",
+        "tags": [
+          "Message Reactions"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/messages/{messageId}/reactions/{reactionType}/users": {
+      "get": {
+        "description": "Get list of users who reacted to a message with a specific reaction type",
+        "operationId": "MessageReactionsController_getReactionUsers",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageId",
+            "required": true,
+            "in": "path",
+            "description": "Message UUID",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "reactionType",
+            "required": true,
+            "in": "path",
+            "description": "Type of reaction to get users for",
+            "schema": {
+              "$ref": "#/components/schemas/ReactionType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reaction users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReactionUsersResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid reaction type"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied to this channel"
+          },
+          "404": {
+            "description": "Channel or message not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get users who reacted with specific type",
+        "tags": [
+          "Message Reactions"
+        ]
+      }
+    },
+    "/api/questionnaire-templates": {
+      "post": {
+        "operationId": "TemplatesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Template created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied or template name already exists"
+          },
+          "409": {
+            "description": "Template name already exists in organization"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new questionnaire template",
+        "tags": [
+          "Questionnaire Templates"
+        ]
+      },
+      "get": {
+        "operationId": "TemplatesController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "minimum": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "active",
+                "archived"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search in name and title",
+            "schema": {
+              "example": "onboarding",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Templates retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateListResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List questionnaire templates",
+        "tags": [
+          "Questionnaire Templates"
+        ]
+      }
+    },
+    "/api/questionnaire-templates/{templateId}": {
+      "get": {
+        "operationId": "TemplatesController_findOne",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Template details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied to template"
+          },
+          "404": {
+            "description": "Template not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get template details with sections and questions",
+        "tags": [
+          "Questionnaire Templates"
+        ]
+      },
+      "put": {
+        "operationId": "TemplatesController_update",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Template updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Cannot update template with active assignments"
+          },
+          "404": {
+            "description": "Template not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update template details",
+        "tags": [
+          "Questionnaire Templates"
+        ]
+      },
+      "delete": {
+        "operationId": "TemplatesController_remove",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Template deleted successfully"
+          },
+          "403": {
+            "description": "Cannot delete template with active assignments"
+          },
+          "404": {
+            "description": "Template not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete/archive template",
+        "tags": [
+          "Questionnaire Templates"
+        ]
+      }
+    },
+    "/api/questionnaire-templates/{templateId}/sections": {
+      "post": {
+        "operationId": "SectionsController_create",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Section created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SectionResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied or template not in DRAFT status"
+          },
+          "404": {
+            "description": "Template not found"
+          },
+          "409": {
+            "description": "Section key or order index already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new section in template",
+        "tags": [
+          "Template Sections"
+        ]
+      },
+      "get": {
+        "operationId": "SectionsController_findAll",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "minimum": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search in title and description",
+            "schema": {
+              "example": "personal",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sections retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SectionListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Template not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List sections in template",
+        "tags": [
+          "Template Sections"
+        ]
+      }
+    },
+    "/api/questionnaire-templates/{templateId}/sections/{sectionId}": {
+      "get": {
+        "operationId": "SectionsController_findOne",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Section details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SectionResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied to template"
+          },
+          "404": {
+            "description": "Template or section not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get section details with questions",
+        "tags": [
+          "Template Sections"
+        ]
+      },
+      "put": {
+        "operationId": "SectionsController_update",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Section updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SectionResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Cannot update section - template not in DRAFT status"
+          },
+          "404": {
+            "description": "Template or section not found"
+          },
+          "409": {
+            "description": "Order index already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update section details",
+        "tags": [
+          "Template Sections"
+        ]
+      },
+      "delete": {
+        "operationId": "SectionsController_remove",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Section deleted successfully"
+          },
+          "403": {
+            "description": "Cannot delete section with questions or template not in DRAFT"
+          },
+          "404": {
+            "description": "Template or section not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete section",
+        "tags": [
+          "Template Sections"
+        ]
+      }
+    },
+    "/api/questionnaire-templates/{templateId}/sections/reorder": {
+      "post": {
+        "operationId": "SectionsController_reorderSections",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderSectionsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sections reordered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SectionListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid section IDs or incomplete list"
+          },
+          "403": {
+            "description": "Cannot reorder sections - template not in DRAFT status"
+          },
+          "404": {
+            "description": "Template not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reorder sections in template",
+        "tags": [
+          "Template Sections"
+        ]
+      }
+    },
+    "/api/questionnaire-templates/{templateId}/sections/{sectionId}/questions": {
+      "post": {
+        "operationId": "QuestionsController_create",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuestionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Question created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid question data for input type"
+          },
+          "403": {
+            "description": "Access denied or template not in DRAFT status"
+          },
+          "404": {
+            "description": "Template or section not found"
+          },
+          "409": {
+            "description": "Question key or order index already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new question in section",
+        "tags": [
+          "Template Questions"
+        ]
+      },
+      "get": {
+        "operationId": "QuestionsController_findAll",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "minimum": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search in question text, key, and placeholder",
+            "schema": {
+              "example": "name",
+              "type": "string"
+            }
+          },
+          {
+            "name": "inputType",
+            "required": false,
+            "in": "query",
+            "description": "Filter by input type",
+            "schema": {
+              "example": "text_input",
+              "type": "string",
+              "enum": [
+                "text_input",
+                "text_area",
+                "number_input",
+                "email_input",
+                "phone_input",
+                "date_input",
+                "single_select",
+                "multi_select",
+                "checkbox",
+                "radio",
+                "file_upload"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Template or section not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List questions in section",
+        "tags": [
+          "Template Questions"
+        ]
+      }
+    },
+    "/api/questionnaire-templates/{templateId}/sections/{sectionId}/questions/{questionId}": {
+      "get": {
+        "operationId": "QuestionsController_findOne",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "questionId",
+            "required": true,
+            "in": "path",
+            "description": "Question UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied to template"
+          },
+          "404": {
+            "description": "Template, section, or question not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get question details",
+        "tags": [
+          "Template Questions"
+        ]
+      },
+      "put": {
+        "operationId": "QuestionsController_update",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "questionId",
+            "required": true,
+            "in": "path",
+            "description": "Question UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuestionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Question updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid question data for input type"
+          },
+          "403": {
+            "description": "Cannot update question - template not in DRAFT status"
+          },
+          "404": {
+            "description": "Template, section, or question not found"
+          },
+          "409": {
+            "description": "Order index already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update question details",
+        "tags": [
+          "Template Questions"
+        ]
+      },
+      "delete": {
+        "operationId": "QuestionsController_remove",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "questionId",
+            "required": true,
+            "in": "path",
+            "description": "Question UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Question deleted successfully"
+          },
+          "403": {
+            "description": "Cannot delete question - template not in DRAFT status"
+          },
+          "404": {
+            "description": "Template, section, or question not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete question",
+        "tags": [
+          "Template Questions"
+        ]
+      }
+    },
+    "/api/questionnaire-templates/{templateId}/sections/{sectionId}/questions/reorder": {
+      "post": {
+        "operationId": "QuestionsController_reorderQuestions",
+        "parameters": [
+          {
+            "name": "templateId",
+            "required": true,
+            "in": "path",
+            "description": "Template UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionId",
+            "required": true,
+            "in": "path",
+            "description": "Section UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderQuestionsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Questions reordered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid question IDs or incomplete list"
+          },
+          "403": {
+            "description": "Cannot reorder questions - template not in DRAFT status"
+          },
+          "404": {
+            "description": "Template or section not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reorder questions in section",
+        "tags": [
+          "Template Questions"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaire-assignments": {
+      "post": {
+        "description": "Create a new questionnaire assignment for a channel. Only Super Admins and Org Admins can create assignments.",
+        "operationId": "AssignmentsController_create",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Assignment created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Template is not active or due date is invalid"
+          },
+          "403": {
+            "description": "Template already assigned to this channel"
+          },
+          "404": {
+            "description": "Channel or template not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Assign questionnaire template to channel",
+        "tags": [
+          "Questionnaire Assignments"
+        ]
+      },
+      "get": {
+        "description": "Get all questionnaire assignments for a channel with pagination and filtering. All channel members can view assignments.",
+        "operationId": "AssignmentsController_findAll",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by status",
+            "schema": {
+              "enum": [
+                "active",
+                "completed",
+                "expired",
+                "cancelled"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (default: 1)",
+            "schema": {
+              "minimum": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page (default: 20, max: 100)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "example": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assignments retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List channel assignments",
+        "tags": [
+          "Questionnaire Assignments"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaire-assignments/{assignmentId}": {
+      "get": {
+        "description": "Get detailed information about a questionnaire assignment including template structure and submission statistics.",
+        "operationId": "AssignmentsController_findOne",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assignment details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Assignment not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get assignment details",
+        "tags": [
+          "Questionnaire Assignments"
+        ]
+      },
+      "put": {
+        "description": "Update questionnaire assignment settings, status, or customization options. Only Super Admins and Org Admins can update assignments.",
+        "operationId": "AssignmentsController_update",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Assignment updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid update data or due date"
+          },
+          "404": {
+            "description": "Assignment not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update assignment",
+        "tags": [
+          "Questionnaire Assignments"
+        ]
+      },
+      "delete": {
+        "description": "Cancel a questionnaire assignment. The assignment status is changed to cancelled, but existing submissions are preserved. Only Super Admins and Org Admins can cancel assignments.",
+        "operationId": "AssignmentsController_remove",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Assignment cancelled successfully"
+          },
+          "404": {
+            "description": "Assignment not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancel assignment",
+        "tags": [
+          "Questionnaire Assignments"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaires/{assignmentId}/sections/{sectionKey}/status": {
+      "get": {
+        "operationId": "SectionResponsesController_getSectionStatus",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionKey",
+            "required": true,
+            "in": "path",
+            "description": "Section business key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Section status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SectionResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Assignment or section not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get section status for current user",
+        "tags": [
+          "Questionnaire Responses - Section-Based"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaires/{assignmentId}/sections/{sectionKey}/responses": {
+      "post": {
+        "operationId": "SectionResponsesController_saveSectionResponses",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionKey",
+            "required": true,
+            "in": "path",
+            "description": "Section business key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSectionResponseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Section responses saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaveSectionResponseResultDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid response data or validation failed"
+          },
+          "403": {
+            "description": "Assignment not active or due date passed"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Save section responses (bulk operation)",
+        "tags": [
+          "Questionnaire Responses - Section-Based"
+        ]
+      },
+      "get": {
+        "operationId": "SectionResponsesController_getSectionResponses",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionKey",
+            "required": true,
+            "in": "path",
+            "description": "Section business key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Section responses retrieved successfully"
+          },
+          "404": {
+            "description": "Section response not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get section responses for current user",
+        "tags": [
+          "Questionnaire Responses - Section-Based"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaires/{assignmentId}/my-submission": {
+      "get": {
+        "operationId": "SubmissionsController_getMySubmission",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Submission status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No submission found for this assignment"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user's submission status",
+        "tags": [
+          "Questionnaire Responses - Submissions"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaires/{assignmentId}/my-responses": {
+      "get": {
+        "operationId": "SubmissionsController_getMyResponses",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responses retrieved successfully"
+          },
+          "404": {
+            "description": "No submission found for this assignment"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user's response data",
+        "tags": [
+          "Questionnaire Responses - Submissions"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaires/{assignmentId}/submit": {
+      "post": {
+        "operationId": "SubmissionsController_submitQuestionnaire",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questionnaire submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Submission incomplete - missing required questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncompleteSubmissionErrorDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Assignment not active or due date passed"
+          },
+          "404": {
+            "description": "No submission found for this assignment"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Submit questionnaire (final submission)",
+        "tags": [
+          "Questionnaire Responses - Submissions"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaires/{assignmentId}/responses": {
+      "post": {
+        "operationId": "QuestionResponsesController_saveMultipleResponses",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveMultipleResponsesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Responses saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaveResponsesResultDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid response data"
+          },
+          "403": {
+            "description": "Assignment not active or due date passed"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Save multiple question responses (legacy/auto-save support)",
+        "tags": [
+          "Questionnaire Responses - Individual Questions"
+        ]
+      }
+    },
+    "/api/channels/{channelId}/questionnaires/{assignmentId}/questions/{sectionKey}/{questionKey}": {
+      "post": {
+        "operationId": "QuestionResponsesController_saveQuestionResponse",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionKey",
+            "required": true,
+            "in": "path",
+            "description": "Section business key",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "questionKey",
+            "required": true,
+            "in": "path",
+            "description": "Question business key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question response saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid response value"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Save or update individual question response",
+        "tags": [
+          "Questionnaire Responses - Individual Questions"
+        ]
+      },
+      "get": {
+        "operationId": "QuestionResponsesController_getQuestionResponse",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionKey",
+            "required": true,
+            "in": "path",
+            "description": "Section business key",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "questionKey",
+            "required": true,
+            "in": "path",
+            "description": "Question business key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question response retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Question response not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get individual question response",
+        "tags": [
+          "Questionnaire Responses - Individual Questions"
+        ]
+      },
+      "delete": {
+        "operationId": "QuestionResponsesController_deleteQuestionResponse",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "description": "Channel UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "description": "Assignment UUID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionKey",
+            "required": true,
+            "in": "path",
+            "description": "Section business key",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "questionKey",
+            "required": true,
+            "in": "path",
+            "description": "Question business key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Question response deleted successfully"
+          },
+          "403": {
+            "description": "Response editing not allowed"
+          },
+          "404": {
+            "description": "Question response not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete individual question response",
+        "tags": [
+          "Questionnaire Responses - Individual Questions"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "SmartConnect API",
+    "description": "API documentation for SmartConnect Backend",
+    "version": "1.0",
+    "contact": {
+
+    }
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "user@example.com",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "Password123!",
+            "minLength": 8
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "JWT access token for API authentication",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh token for obtaining new access tokens",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "user": {
+            "type": "object",
+            "description": "User information",
+            "example": {
+              "id": "123e4567-e89b-12d3-a456-426614174000",
+              "email": "user@example.com",
+              "firstName": "John",
+              "lastName": "Doe",
+              "role": "org_user",
+              "organizationId": "123e4567-e89b-12d3-a456-426614174001"
+            }
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken",
+          "user"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "Valid refresh token for generating new access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "UserProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User unique identifier",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "user@example.com"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name",
+            "example": "Doe"
+          },
+          "fullName": {
+            "type": "string",
+            "description": "User full name",
+            "example": "John Doe"
+          },
+          "role": {
+            "type": "string",
+            "description": "User role in the system",
+            "enum": [
+              "super_admin",
+              "org_admin",
+              "org_user",
+              "client"
+            ],
+            "example": "org_user"
+          },
+          "organizationId": {
+            "type": "object",
+            "description": "Organization ID if user belongs to an organization",
+            "example": "123e4567-e89b-12d3-a456-426614174001",
+            "nullable": true
+          },
+          "lastLogin": {
+            "type": "object",
+            "description": "Last login timestamp",
+            "example": "2024-01-15T10:30:00Z",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Account creation timestamp",
+            "example": "2024-01-01T12:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "firstName",
+          "lastName",
+          "fullName",
+          "role",
+          "organizationId",
+          "lastLogin",
+          "createdAt"
+        ]
+      },
+      "CreateOrganizationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Organization name",
+            "example": "Acme Corporation",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "subdomain": {
+            "type": "string",
+            "description": "Organization subdomain (unique identifier)",
+            "example": "acme-corp",
+            "minLength": 3,
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+          },
+          "settings": {
+            "type": "object",
+            "description": "Organization settings (JSON object)",
+            "example": {
+              "timezone": "UTC",
+              "features": [
+                "analytics",
+                "reports"
+              ],
+              "theme": "default"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "subdomain"
+        ]
+      },
+      "OrganizationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Organization unique identifier",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Organization name",
+            "example": "Acme Corporation"
+          },
+          "subdomain": {
+            "type": "string",
+            "description": "Organization subdomain",
+            "example": "acme-corp"
+          },
+          "status": {
+            "type": "string",
+            "description": "Organization status",
+            "enum": [
+              "active",
+              "inactive"
+            ],
+            "example": "active"
+          },
+          "settings": {
+            "type": "object",
+            "description": "Organization settings",
+            "example": {
+              "timezone": "UTC",
+              "features": [
+                "analytics",
+                "reports"
+              ],
+              "theme": "default"
+            },
+            "nullable": true
+          },
+          "userCount": {
+            "type": "number",
+            "description": "Number of users in the organization",
+            "example": 25
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Organization creation timestamp",
+            "example": "2024-01-01T12:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Organization last update timestamp",
+            "example": "2024-01-15T10:30:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "subdomain",
+          "status",
+          "settings",
+          "userCount",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "OrganizationListResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "List of organizations",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total number of organizations",
+            "example": 50
+          },
+          "page": {
+            "type": "number",
+            "description": "Current page number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "description": "Number of items per page",
+            "example": 10
+          },
+          "totalPages": {
+            "type": "number",
+            "description": "Total number of pages",
+            "example": 5
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit",
+          "totalPages"
+        ]
+      },
+      "UpdateOrganizationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Organization name",
+            "example": "Acme Corporation",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "subdomain": {
+            "type": "string",
+            "description": "Organization subdomain (unique identifier)",
+            "example": "acme-corp",
+            "minLength": 3,
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+          },
+          "settings": {
+            "type": "object",
+            "description": "Organization settings (JSON object)",
+            "example": {
+              "timezone": "UTC",
+              "features": [
+                "analytics",
+                "reports"
+              ],
+              "theme": "default"
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Organization status",
+            "enum": [
+              "active",
+              "inactive"
+            ],
+            "example": "active"
+          }
+        }
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password (minimum 8 characters)",
+            "example": "SecurePassword123!",
+            "minLength": 8
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name",
+            "example": "John",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name",
+            "example": "Doe",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "role": {
+            "type": "string",
+            "description": "User role in the system",
+            "enum": [
+              "super_admin",
+              "org_admin",
+              "org_user",
+              "client"
+            ],
+            "example": "org_user"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization ID (required for non-super admin users)",
+            "example": "123e4567-e89b-12d3-a456-426614174001"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User unique identifier",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "john.doe@example.com"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name",
+            "example": "Doe"
+          },
+          "fullName": {
+            "type": "string",
+            "description": "User full name",
+            "example": "John Doe"
+          },
+          "role": {
+            "type": "string",
+            "description": "User role in the system",
+            "enum": [
+              "super_admin",
+              "org_admin",
+              "org_user",
+              "client"
+            ],
+            "example": "org_user"
+          },
+          "status": {
+            "type": "string",
+            "description": "User status",
+            "enum": [
+              "active",
+              "inactive"
+            ],
+            "example": "active"
+          },
+          "organizationId": {
+            "type": "object",
+            "description": "Organization ID if user belongs to an organization",
+            "example": "123e4567-e89b-12d3-a456-426614174001",
+            "nullable": true
+          },
+          "organization": {
+            "type": "object",
+            "description": "Organization information",
+            "example": {
+              "id": "123e4567-e89b-12d3-a456-426614174001",
+              "name": "Acme Corporation",
+              "subdomain": "acme-corp"
+            },
+            "nullable": true
+          },
+          "lastLogin": {
+            "type": "object",
+            "description": "Last login timestamp",
+            "example": "2024-01-15T10:30:00Z",
+            "nullable": true
+          },
+          "failedLoginAttempts": {
+            "type": "number",
+            "description": "Number of failed login attempts",
+            "example": 0
+          },
+          "lockedUntil": {
+            "type": "object",
+            "description": "Account locked until timestamp",
+            "example": null,
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "User creation timestamp",
+            "example": "2024-01-01T12:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "User last update timestamp",
+            "example": "2024-01-15T10:30:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "firstName",
+          "lastName",
+          "fullName",
+          "role",
+          "status",
+          "organizationId",
+          "organization",
+          "lastLogin",
+          "failedLoginAttempts",
+          "lockedUntil",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UserListResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "List of users",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total number of users",
+            "example": 100
+          },
+          "page": {
+            "type": "number",
+            "description": "Current page number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "description": "Number of items per page",
+            "example": 10
+          },
+          "totalPages": {
+            "type": "number",
+            "description": "Total number of pages",
+            "example": 10
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit",
+          "totalPages"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "john.doe@example.com"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name",
+            "example": "John",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name",
+            "example": "Doe",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "role": {
+            "type": "string",
+            "description": "User role in the system",
+            "enum": [
+              "super_admin",
+              "org_admin",
+              "org_user",
+              "client"
+            ],
+            "example": "org_user"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization ID (required for non-super admin users)",
+            "example": "123e4567-e89b-12d3-a456-426614174001"
+          },
+          "password": {
+            "type": "string",
+            "description": "New password (minimum 8 characters)",
+            "example": "NewSecurePassword123!",
+            "minLength": 8
+          },
+          "status": {
+            "type": "string",
+            "description": "User status",
+            "enum": [
+              "active",
+              "inactive"
+            ],
+            "example": "active"
+          }
+        }
+      },
+      "CreateChannelDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Channel name (unique within organization)",
+            "example": "general",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "description": "Channel description",
+            "example": "General discussion channel for the team"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "ChannelUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "john.doe@example.com"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email"
+        ]
+      },
+      "ChannelMembershipDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Membership ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "user": {
+            "description": "User details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChannelUserDto"
+              }
+            ]
+          },
+          "role": {
+            "type": "string",
+            "description": "User role in the channel",
+            "enum": [
+              "member",
+              "admin"
+            ],
+            "example": "member"
+          },
+          "joinedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when user joined the channel",
+            "example": "2024-01-15T10:30:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "user",
+          "role",
+          "joinedAt"
+        ]
+      },
+      "ChannelResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Channel ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Channel name",
+            "example": "general"
+          },
+          "description": {
+            "type": "object",
+            "description": "Channel description",
+            "example": "General discussion channel for the team",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "Channel status",
+            "enum": [
+              "active",
+              "archived"
+            ],
+            "example": "active"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "User ID who created the channel",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Channel creation date",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Channel last update date",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "memberships": {
+            "description": "Channel members (only included in detailed views)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChannelMembershipDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "status",
+          "organizationId",
+          "createdBy",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ChannelListResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Array of channels",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChannelResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total number of channels",
+            "example": 25
+          },
+          "page": {
+            "type": "number",
+            "description": "Current page number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "description": "Items per page",
+            "example": 10
+          },
+          "totalPages": {
+            "type": "number",
+            "description": "Total number of pages",
+            "example": 3
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit",
+          "totalPages"
+        ]
+      },
+      "UpdateChannelDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Channel name (unique within organization)",
+            "example": "general",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "description": "Channel description",
+            "example": "General discussion channel for the team"
+          },
+          "status": {
+            "type": "string",
+            "description": "Channel status",
+            "enum": [
+              "active",
+              "archived"
+            ],
+            "example": "active"
+          }
+        }
+      },
+      "AddUsersToChannelDto": {
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "description": "Array of user IDs to add to the channel",
+            "example": [
+              "123e4567-e89b-12d3-a456-426614174000",
+              "123e4567-e89b-12d3-a456-426614174001"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "userIds"
+        ]
+      },
+      "CreateMessageDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Message content",
+            "example": "Hello everyone! How is everyone doing today?",
+            "minLength": 1,
+            "maxLength": 10000
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "MessageUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "john.doe@example.com"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email"
+        ]
+      },
+      "ReactionType": {
+        "type": "string",
+        "enum": [
+          "like",
+          "love",
+          "laugh",
+          "wow",
+          "sad",
+          "angry"
+        ],
+        "description": "Type of reaction"
+      },
+      "ReactionSummaryDto": {
+        "type": "object",
+        "properties": {
+          "reactionType": {
+            "description": "Type of reaction",
+            "example": "like",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReactionType"
+              }
+            ]
+          },
+          "count": {
+            "type": "number",
+            "description": "Count of users who reacted with this type",
+            "example": 5
+          },
+          "hasReacted": {
+            "type": "boolean",
+            "description": "Whether the current user has this reaction",
+            "example": true
+          }
+        },
+        "required": [
+          "reactionType",
+          "count",
+          "hasReacted"
+        ]
+      },
+      "MessageReactionsResponseDto": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string",
+            "description": "Message ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "reactions": {
+            "description": "Summary of reactions by type",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReactionSummaryDto"
+            }
+          },
+          "totalReactions": {
+            "type": "number",
+            "description": "Total count of all reactions",
+            "example": 12
+          }
+        },
+        "required": [
+          "messageId",
+          "reactions",
+          "totalReactions"
+        ]
+      },
+      "MessageResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Message ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "channelId": {
+            "type": "string",
+            "description": "Channel ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID who sent the message",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content",
+            "example": "Hello everyone! How is everyone doing today?"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Message creation date",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "user": {
+            "description": "User details who sent the message",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MessageUserDto"
+              }
+            ]
+          },
+          "reactions": {
+            "description": "Message reactions summary (only when includeReactions=true)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MessageReactionsResponseDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "channelId",
+          "userId",
+          "content",
+          "createdAt",
+          "user"
+        ]
+      },
+      "MessageListResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Array of messages",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total number of messages",
+            "example": 150
+          },
+          "page": {
+            "type": "number",
+            "description": "Current page number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "description": "Items per page",
+            "example": 20
+          },
+          "totalPages": {
+            "type": "number",
+            "description": "Total number of pages",
+            "example": 8
+          },
+          "hasMore": {
+            "type": "boolean",
+            "description": "Whether there are more messages (for infinite scroll)",
+            "example": true
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit",
+          "totalPages",
+          "hasMore"
+        ]
+      },
+      "CreateReactionDto": {
+        "type": "object",
+        "properties": {
+          "reactionType": {
+            "description": "Type of reaction",
+            "example": "like",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReactionType"
+              }
+            ]
+          }
+        },
+        "required": [
+          "reactionType"
+        ]
+      },
+      "ReactionUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "john.doe@example.com"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email"
+        ]
+      },
+      "ReactionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Reaction ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "messageId": {
+            "type": "string",
+            "description": "Message ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID who reacted",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "reactionType": {
+            "description": "Type of reaction",
+            "example": "like",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReactionType"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Reaction creation date",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "user": {
+            "description": "User details who reacted",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReactionUserDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "messageId",
+          "userId",
+          "reactionType",
+          "createdAt",
+          "user"
+        ]
+      },
+      "ReactionUsersResponseDto": {
+        "type": "object",
+        "properties": {
+          "reactionType": {
+            "description": "Type of reaction",
+            "example": "like",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReactionType"
+              }
+            ]
+          },
+          "messageId": {
+            "type": "string",
+            "description": "Message ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "users": {
+            "description": "Users who reacted with this type",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReactionUserDto"
+            }
+          },
+          "count": {
+            "type": "number",
+            "description": "Total count of users with this reaction",
+            "example": 5
+          }
+        },
+        "required": [
+          "reactionType",
+          "messageId",
+          "users",
+          "count"
+        ]
+      },
+      "CreateTemplateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Template name (unique per organization)",
+            "example": "client_onboarding_2024"
+          },
+          "title": {
+            "type": "string",
+            "description": "Template display title",
+            "example": "Client Onboarding Questionnaire"
+          },
+          "description": {
+            "type": "string",
+            "description": "Template description",
+            "example": "Comprehensive onboarding form for new clients"
+          },
+          "status": {
+            "type": "string",
+            "description": "Template status",
+            "enum": [
+              "draft",
+              "active",
+              "archived"
+            ],
+            "default": "draft"
+          }
+        },
+        "required": [
+          "name",
+          "title"
+        ]
+      },
+      "TemplateResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "archived"
+            ]
+          },
+          "version": {
+            "type": "number"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "sectionsCount": {
+            "type": "number"
+          },
+          "questionsCount": {
+            "type": "number"
+          },
+          "usageCount": {
+            "type": "number"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "creator": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "organizationId",
+          "name",
+          "title",
+          "status",
+          "version",
+          "createdBy",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "TemplateListResponse": {
+        "type": "object",
+        "properties": {
+          "templates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TemplateResponseDto"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              },
+              "totalPages": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "required": [
+          "templates",
+          "pagination"
+        ]
+      },
+      "UpdateTemplateDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "archived"
+            ]
+          }
+        }
+      },
+      "CreateSectionDto": {
+        "type": "object",
+        "properties": {
+          "sectionKey": {
+            "type": "string",
+            "description": "Section key (unique per template)",
+            "example": "personal_info"
+          },
+          "title": {
+            "type": "string",
+            "description": "Section display title",
+            "example": "Personal Information"
+          },
+          "description": {
+            "type": "string",
+            "description": "Section description",
+            "example": "Please provide your personal details"
+          },
+          "orderIndex": {
+            "type": "number",
+            "description": "Section order index",
+            "example": 1,
+            "minimum": 0,
+            "maximum": 999
+          },
+          "completionMessage": {
+            "type": "string",
+            "description": "Completion message",
+            "example": "Personal information section completed!",
+            "default": "Section completed!"
+          }
+        },
+        "required": [
+          "sectionKey",
+          "title",
+          "orderIndex"
+        ]
+      },
+      "SectionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "submissionId": {
+            "type": "string"
+          },
+          "sectionKey": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "completed"
+            ]
+          },
+          "startedAt": {
+            "type": "object"
+          },
+          "completedAt": {
+            "type": "object"
+          },
+          "lastSavedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/SectionProgressDto"
+          },
+          "completionMessage": {
+            "type": "object"
+          },
+          "questionResponses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionResponseInputDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "submissionId",
+          "sectionKey",
+          "status",
+          "lastSavedAt",
+          "progress"
+        ]
+      },
+      "SectionListResponse": {
+        "type": "object",
+        "properties": {
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SectionResponseDto"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              },
+              "totalPages": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "required": [
+          "sections",
+          "pagination"
+        ]
+      },
+      "UpdateSectionDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "orderIndex": {
+            "type": "number"
+          },
+          "completionMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "ReorderSectionsDto": {
+        "type": "object",
+        "properties": {
+          "sectionIds": {
+            "description": "Array of section IDs in the desired order",
+            "example": [
+              "uuid1",
+              "uuid2",
+              "uuid3"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "sectionIds"
+        ]
+      },
+      "CreateQuestionDto": {
+        "type": "object",
+        "properties": {
+          "questionKey": {
+            "type": "string",
+            "description": "Question key (unique per section)",
+            "example": "Q1"
+          },
+          "questionText": {
+            "type": "string",
+            "description": "Question text",
+            "example": "What is your full name?"
+          },
+          "inputType": {
+            "type": "string",
+            "description": "Input type for the question",
+            "enum": [
+              "text_input",
+              "text_area",
+              "number_input",
+              "email_input",
+              "phone_input",
+              "date_input",
+              "single_select",
+              "multi_select",
+              "checkbox",
+              "radio",
+              "file_upload"
+            ],
+            "example": "text_input"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether the question is required",
+            "example": true,
+            "default": true
+          },
+          "orderIndex": {
+            "type": "number",
+            "description": "Question order index within section",
+            "example": 1,
+            "minimum": 0,
+            "maximum": 999
+          },
+          "options": {
+            "description": "Options for select-type questions",
+            "example": [
+              "Option 1",
+              "Option 2",
+              "Option 3"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "validationRules": {
+            "type": "object",
+            "description": "Validation rules for the question",
+            "additionalProperties": true,
+            "example": {
+              "minLength": 2,
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z ]+$"
+            }
+          },
+          "placeholder": {
+            "type": "string",
+            "description": "Placeholder text for input fields",
+            "example": "Enter your full name"
+          }
+        },
+        "required": [
+          "questionKey",
+          "questionText",
+          "inputType",
+          "orderIndex"
+        ]
+      },
+      "QuestionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "questionKey": {
+            "type": "string"
+          },
+          "sectionKey": {
+            "type": "string"
+          },
+          "responseValue": {
+            "type": "object"
+          },
+          "responseMetadata": {
+            "type": "object"
+          },
+          "answeredAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "questionKey",
+          "sectionKey",
+          "responseValue",
+          "answeredAt",
+          "updatedAt"
+        ]
+      },
+      "QuestionListResponse": {
+        "type": "object",
+        "properties": {
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionResponseDto"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              },
+              "totalPages": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "required": [
+          "questions",
+          "pagination"
+        ]
+      },
+      "UpdateQuestionDto": {
+        "type": "object",
+        "properties": {
+          "questionText": {
+            "type": "string"
+          },
+          "inputType": {
+            "type": "string",
+            "enum": [
+              "text_input",
+              "text_area",
+              "number_input",
+              "email_input",
+              "phone_input",
+              "date_input",
+              "single_select",
+              "multi_select",
+              "checkbox",
+              "radio",
+              "file_upload"
+            ]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "orderIndex": {
+            "type": "number"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "validationRules": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "placeholder": {
+            "type": "string"
+          }
+        }
+      },
+      "ReorderQuestionsDto": {
+        "type": "object",
+        "properties": {
+          "questionIds": {
+            "description": "Array of question IDs in the desired order",
+            "example": [
+              "uuid1",
+              "uuid2",
+              "uuid3"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "questionIds"
+        ]
+      },
+      "AssignmentSettingsDto": {
+        "type": "object",
+        "properties": {
+          "hiddenSections": {
+            "description": "Section keys to hide from this assignment",
+            "example": [
+              "section_3"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requiredOverrides": {
+            "type": "object",
+            "description": "Override required status for specific questions",
+            "example": {
+              "Q5": false,
+              "Q8": true
+            }
+          },
+          "customValidation": {
+            "type": "object",
+            "description": "Custom validation rules for specific questions"
+          }
+        }
+      },
+      "CreateAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "string",
+            "description": "Template UUID to assign",
+            "example": "template-uuid"
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "Due date for completing the questionnaire",
+            "example": "2025-10-10T23:59:59.000Z"
+          },
+          "customInstructions": {
+            "type": "string",
+            "description": "Custom instructions for this assignment",
+            "example": "Please complete this by end of week for your personalized plan."
+          },
+          "customTitle": {
+            "type": "string",
+            "description": "Override template title",
+            "example": "New Client Onboarding - October 2025"
+          },
+          "allowPartialSubmissions": {
+            "type": "boolean",
+            "description": "Allow users to save draft responses",
+            "default": true
+          },
+          "allowResponseEditing": {
+            "type": "boolean",
+            "description": "Allow users to edit submitted responses",
+            "default": true
+          },
+          "maxResponsesPerUser": {
+            "type": "number",
+            "description": "Maximum responses per user",
+            "default": 1,
+            "minimum": 1
+          },
+          "assignmentSettings": {
+            "description": "Assignment customization settings",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AssignmentSettingsDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "templateId"
+        ]
+      },
+      "SubmissionStatsDto": {
+        "type": "object",
+        "properties": {
+          "totalEligibleUsers": {
+            "type": "number"
+          },
+          "totalSubmissions": {
+            "type": "number"
+          },
+          "totalInProgress": {
+            "type": "number"
+          },
+          "completionRate": {
+            "type": "number"
+          },
+          "lastSubmissionAt": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "totalEligibleUsers",
+          "totalSubmissions",
+          "totalInProgress",
+          "completionRate"
+        ]
+      },
+      "AssignmentResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "templateId": {
+            "type": "string"
+          },
+          "channelId": {
+            "type": "string"
+          },
+          "assignedBy": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "completed",
+              "expired",
+              "cancelled"
+            ]
+          },
+          "dueDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "customInstructions": {
+            "type": "string"
+          },
+          "customTitle": {
+            "type": "string"
+          },
+          "allowPartialSubmissions": {
+            "type": "boolean"
+          },
+          "allowResponseEditing": {
+            "type": "boolean"
+          },
+          "maxResponsesPerUser": {
+            "type": "number"
+          },
+          "assignmentSettings": {
+            "$ref": "#/components/schemas/AssignmentSettingsDto"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "template": {
+            "type": "object"
+          },
+          "channel": {
+            "type": "object"
+          },
+          "assignedByUser": {
+            "type": "object"
+          },
+          "submissionStats": {
+            "$ref": "#/components/schemas/SubmissionStatsDto"
+          }
+        },
+        "required": [
+          "id",
+          "organizationId",
+          "templateId",
+          "channelId",
+          "assignedBy",
+          "status",
+          "allowPartialSubmissions",
+          "allowResponseEditing",
+          "maxResponsesPerUser",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "AssignmentListResponseDto": {
+        "type": "object",
+        "properties": {
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssignmentResponseDto"
+            }
+          },
+          "pagination": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "assignments",
+          "pagination"
+        ]
+      },
+      "UpdateAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "dueDate": {
+            "type": "string",
+            "description": "Due date for completing the questionnaire"
+          },
+          "customInstructions": {
+            "type": "string",
+            "description": "Custom instructions for this assignment"
+          },
+          "customTitle": {
+            "type": "string",
+            "description": "Override template title"
+          },
+          "status": {
+            "type": "string",
+            "description": "Assignment status",
+            "enum": [
+              "active",
+              "completed",
+              "expired",
+              "cancelled"
+            ]
+          },
+          "allowPartialSubmissions": {
+            "type": "boolean",
+            "description": "Allow users to save draft responses"
+          },
+          "allowResponseEditing": {
+            "type": "boolean",
+            "description": "Allow users to edit submitted responses"
+          },
+          "assignmentSettings": {
+            "description": "Assignment customization settings",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AssignmentSettingsDto"
+              }
+            ]
+          }
+        }
+      },
+      "SectionProgressDto": {
+        "type": "object",
+        "properties": {
+          "totalQuestions": {
+            "type": "number"
+          },
+          "answeredQuestions": {
+            "type": "number"
+          },
+          "requiredQuestions": {
+            "type": "number"
+          },
+          "answeredRequiredQuestions": {
+            "type": "number"
+          },
+          "completionPercentage": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalQuestions",
+          "answeredQuestions",
+          "requiredQuestions",
+          "answeredRequiredQuestions",
+          "completionPercentage"
+        ]
+      },
+      "QuestionResponseInputDto": {
+        "type": "object",
+        "properties": {
+          "questionKey": {
+            "type": "string",
+            "description": "Question key",
+            "example": "Q1"
+          },
+          "value": {
+            "type": "object",
+            "description": "Response value (varies by question type)"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional response metadata"
+          }
+        },
+        "required": [
+          "questionKey",
+          "value"
+        ]
+      },
+      "SaveSectionResponseDto": {
+        "type": "object",
+        "properties": {
+          "questionResponses": {
+            "description": "Array of question responses",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionResponseInputDto"
+            }
+          },
+          "sectionStatus": {
+            "type": "string",
+            "description": "Section status",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "completed"
+            ]
+          },
+          "autoSave": {
+            "type": "boolean",
+            "description": "Whether this is an auto-save operation",
+            "default": false
+          }
+        },
+        "required": [
+          "questionResponses"
+        ]
+      },
+      "SaveSectionResponseResultDto": {
+        "type": "object",
+        "properties": {
+          "sectionResponse": {
+            "$ref": "#/components/schemas/SectionResponseDto"
+          },
+          "savedQuestions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionResponseInputDto"
+            }
+          },
+          "submissionProgress": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "sectionResponse",
+          "savedQuestions",
+          "submissionProgress"
+        ]
+      },
+      "SectionProgressDetailDto": {
+        "type": "object",
+        "properties": {
+          "sectionKey": {
+            "type": "string"
+          },
+          "sectionTitle": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "completed"
+            ]
+          },
+          "totalQuestions": {
+            "type": "number"
+          },
+          "answeredQuestions": {
+            "type": "number"
+          },
+          "requiredQuestions": {
+            "type": "number"
+          },
+          "answeredRequiredQuestions": {
+            "type": "number"
+          },
+          "completionPercentage": {
+            "type": "number"
+          },
+          "isComplete": {
+            "type": "boolean"
+          },
+          "startedAt": {
+            "type": "object"
+          },
+          "completedAt": {
+            "type": "object"
+          },
+          "estimatedTimeToComplete": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "sectionKey",
+          "sectionTitle",
+          "status",
+          "totalQuestions",
+          "answeredQuestions",
+          "requiredQuestions",
+          "answeredRequiredQuestions",
+          "completionPercentage",
+          "isComplete"
+        ]
+      },
+      "ProgressDataDto": {
+        "type": "object",
+        "properties": {
+          "totalSections": {
+            "type": "number"
+          },
+          "completedSections": {
+            "type": "number"
+          },
+          "totalQuestions": {
+            "type": "number"
+          },
+          "answeredQuestions": {
+            "type": "number"
+          },
+          "overallProgress": {
+            "type": "number"
+          },
+          "sectionProgress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SectionProgressDetailDto"
+            }
+          },
+          "estimatedTimeRemaining": {
+            "type": "number"
+          },
+          "averageTimePerSection": {
+            "type": "number"
+          },
+          "totalTimeSpent": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalSections",
+          "completedSections",
+          "totalQuestions",
+          "answeredQuestions",
+          "overallProgress",
+          "sectionProgress"
+        ]
+      },
+      "SubmissionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "assignmentId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "submitted",
+              "completed"
+            ]
+          },
+          "startedAt": {
+            "type": "object"
+          },
+          "submittedAt": {
+            "type": "object"
+          },
+          "lastActivityAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "progressData": {
+            "$ref": "#/components/schemas/ProgressDataDto"
+          },
+          "assignment": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "assignmentId",
+          "userId",
+          "status",
+          "lastActivityAt",
+          "progressData"
+        ]
+      },
+      "MissingRequiredQuestionDto": {
+        "type": "object",
+        "properties": {
+          "sectionKey": {
+            "type": "string"
+          },
+          "questionKey": {
+            "type": "string"
+          },
+          "questionText": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sectionKey",
+          "questionKey",
+          "questionText"
+        ]
+      },
+      "IncompleteSubmissionErrorDto": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "missingRequired": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MissingRequiredQuestionDto"
+            }
+          }
+        },
+        "required": [
+          "error",
+          "message",
+          "missingRequired"
+        ]
+      },
+      "SaveQuestionResponseDto": {
+        "type": "object",
+        "properties": {
+          "questionKey": {
+            "type": "string",
+            "description": "Question key",
+            "example": "Q1"
+          },
+          "sectionKey": {
+            "type": "string",
+            "description": "Section key",
+            "example": "section_1"
+          },
+          "responseValue": {
+            "type": "object",
+            "description": "Response value (varies by question type)"
+          },
+          "responseMetadata": {
+            "type": "object",
+            "description": "Additional response metadata"
+          }
+        },
+        "required": [
+          "questionKey",
+          "sectionKey",
+          "responseValue"
+        ]
+      },
+      "SaveMultipleResponsesDto": {
+        "type": "object",
+        "properties": {
+          "responses": {
+            "description": "Array of question responses",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaveQuestionResponseDto"
+            }
+          },
+          "sectionKey": {
+            "type": "string",
+            "description": "Section key if saving entire section"
+          },
+          "autoSave": {
+            "type": "boolean",
+            "description": "Whether this is an auto-save operation",
+            "default": true
+          }
+        },
+        "required": [
+          "responses"
+        ]
+      },
+      "SaveResponsesResultDto": {
+        "type": "object",
+        "properties": {
+          "submissionId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "submitted",
+              "completed"
+            ]
+          },
+          "lastSavedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "savedResponses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionResponseDto"
+            }
+          },
+          "progressData": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "submissionId",
+          "status",
+          "lastSavedAt",
+          "savedResponses",
+          "progressData"
+        ]
+      }
+    }
+  }
+}

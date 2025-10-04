@@ -1,0 +1,177 @@
+{
+  "id": "nutrition_onboarding_v1",
+  "title": "Nutrition Plan Questionnaire",
+  "sections": [
+    {
+      "id": "section_1_personal_info",
+      "title": "Personal Information",
+      "description": "Tell us about yourself so we can create your personalized nutrition plan.",
+      "completionMessage": "Great! Now let's talk about your health goals.",
+      "questions": [
+        {
+          "id": "Q1",
+          "sectionId": "section_1_personal_info",
+          "questionText": "What's your name?",
+          "inputType": "text_input",
+          "required": true,
+          "placeholder": "Enter your full name",
+          "validation": {
+            "minLength": 2,
+            "maxLength": 50,
+            "required": true
+          }
+        },
+        {
+          "id": "Q2",
+          "sectionId": "section_1_personal_info",
+          "questionText": "What's your age?",
+          "inputType": "number_input",
+          "required": true,
+          "placeholder": "Enter your age",
+          "validation": {
+            "minValue": 18,
+            "maxValue": 100,
+            "required": true
+          }
+        },
+        {
+          "id": "Q3",
+          "sectionId": "section_1_personal_info",
+          "questionText": "What's your current weight?",
+          "inputType": "number_input",
+          "required": true,
+          "placeholder": "Enter weight in lbs",
+          "validation": {
+            "minValue": 50,
+            "maxValue": 500,
+            "required": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "section_2_goals",
+      "title": "Health Goals",
+      "description": "Help us understand what you want to achieve.",
+      "completionMessage": "Perfect! Let's learn about your health background.",
+      "questions": [
+        {
+          "id": "Q4",
+          "sectionId": "section_2_goals",
+          "questionText": "What's your primary health goal?",
+          "inputType": "single_select",
+          "required": true,
+          "options": [
+            "Lose weight",
+            "Gain weight",
+            "Maintain weight",
+            "Build muscle",
+            "Improve energy",
+            "Better digestion",
+            "Other"
+          ]
+        },
+        {
+          "id": "Q5",
+          "sectionId": "section_2_goals",
+          "questionText": "How would you describe your current activity level?",
+          "inputType": "single_select",
+          "required": true,
+          "options": [
+            "Sedentary (little to no exercise)",
+            "Lightly active (light exercise 1-3 days/week)",
+            "Moderately active (moderate exercise 3-5 days/week)",
+            "Very active (hard exercise 6-7 days/week)",
+            "Extremely active (physical job + exercise)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section_3_health_background",
+      "title": "Health Background",
+      "description": "Let us know about any health considerations.",
+      "completionMessage": "Thanks! Finally, let's talk about your lifestyle.",
+      "questions": [
+        {
+          "id": "Q6",
+          "sectionId": "section_3_health_background",
+          "questionText": "Do you have any dietary restrictions or allergies?",
+          "inputType": "multi_select",
+          "required": false,
+          "options": [
+            "Vegetarian",
+            "Vegan",
+            "Gluten-free",
+            "Dairy-free",
+            "Nut allergies",
+            "Seafood allergies",
+            "Other",
+            "None"
+          ]
+        },
+        {
+          "id": "Q7",
+          "sectionId": "section_3_health_background",
+          "questionText": "Are you currently taking any medications or supplements?",
+          "inputType": "text_area",
+          "required": false,
+          "placeholder": "Please list any medications or supplements, or type 'None'",
+          "validation": {
+            "maxLength": 500
+          }
+        }
+      ]
+    },
+    {
+      "id": "section_4_lifestyle",
+      "title": "Lifestyle",
+      "description": "Tell us about your daily routine and preferences.",
+      "completionMessage": "Excellent! We have everything we need to create your personalized nutrition plan.",
+      "questions": [
+        {
+          "id": "Q8",
+          "sectionId": "section_4_lifestyle",
+          "questionText": "How many meals do you typically eat per day?",
+          "inputType": "single_select",
+          "required": true,
+          "options": [
+            "2 meals",
+            "3 meals",
+            "4-5 small meals",
+            "6+ small meals",
+            "Irregular eating pattern"
+          ]
+        },
+        {
+          "id": "Q9",
+          "sectionId": "section_4_lifestyle",
+          "questionText": "What's your biggest challenge with maintaining a healthy diet?",
+          "inputType": "multi_select",
+          "required": false,
+          "options": [
+            "Lack of time for meal prep",
+            "Limited cooking skills",
+            "Eating out frequently",
+            "Cravings for unhealthy foods",
+            "Budget constraints",
+            "Family preferences",
+            "Work schedule",
+            "Other"
+          ]
+        },
+        {
+          "id": "Q10",
+          "sectionId": "section_4_lifestyle",
+          "questionText": "Is there anything else you'd like us to know about your nutrition goals or preferences?",
+          "inputType": "text_area",
+          "required": false,
+          "placeholder": "Share any additional information that might help us create your perfect nutrition plan...",
+          "validation": {
+            "maxLength": 1000
+          }
+        }
+      ]
+    }
+  ]
+}

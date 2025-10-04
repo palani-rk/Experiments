@@ -4,7 +4,7 @@ import 'mockup_card_based_layout.dart';
 import 'mockup_chat_bubble_layout.dart';
 import 'mockup_list_based_layout.dart';
 import 'shared/theme/app_theme.dart';
-import 'features/onboarding/presentation/pages/questionnaire_page.dart';
+import 'features/client_questionnaire_flow/presentation/pages/welcome_page.dart' as phase1;
 
 void main() {
   runApp(const ProviderScope(
@@ -41,9 +41,10 @@ class MockupSelectionScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             const Text(
               'Choose a mockup to test:',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -90,17 +91,18 @@ class MockupSelectionScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _buildMockupCard(
               context,
-              'Clean Architecture Questionnaire',
-              'Riverpod + Freezed + Clean Architecture',
-              Icons.architecture_outlined,
+              'Phase 1: Client Questionnaire Flow',
+              'Design spec implementation - Static UI with proper components',
+              Icons.assignment_outlined,
               () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const QuestionnairePage(),
+                  builder: (context) => const phase1.WelcomePage(),
                 ),
               ),
             ),
           ],
+          ),
         ),
       ),
     );

@@ -14,6 +14,7 @@ _$BotMessageImpl _$$BotMessageImplFromJson(Map<String, dynamic> json) =>
       messageType: $enumDecode(_$MessageTypeEnumMap, json['messageType']),
       timestamp: DateTime.parse(json['timestamp'] as String),
       isEditable: json['isEditable'] as bool? ?? false,
+      order: (json['order'] as num?)?.toInt() ?? 0,
       context: json['context'] as String?,
       metadata: json['metadata'] as Map<String, dynamic>?,
       $type: json['runtimeType'] as String?,
@@ -27,6 +28,7 @@ Map<String, dynamic> _$$BotMessageImplToJson(_$BotMessageImpl instance) =>
       'messageType': _$MessageTypeEnumMap[instance.messageType]!,
       'timestamp': instance.timestamp.toIso8601String(),
       'isEditable': instance.isEditable,
+      'order': instance.order,
       'context': instance.context,
       'metadata': instance.metadata,
       'runtimeType': instance.$type,
@@ -54,6 +56,8 @@ _$QuestionAnswerImpl _$$QuestionAnswerImplFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$MessageTypeEnumMap, json['messageType']) ??
               MessageType.userAnswer,
       isEditable: json['isEditable'] as bool? ?? true,
+      isComplete: json['isComplete'] as bool? ?? false,
+      order: (json['order'] as num?)?.toInt() ?? 0,
       formattedAnswer: json['formattedAnswer'] as String?,
       validation: json['validation'] == null
           ? null
@@ -75,6 +79,8 @@ Map<String, dynamic> _$$QuestionAnswerImplToJson(
       'timestamp': instance.timestamp.toIso8601String(),
       'messageType': _$MessageTypeEnumMap[instance.messageType]!,
       'isEditable': instance.isEditable,
+      'isComplete': instance.isComplete,
+      'order': instance.order,
       'formattedAnswer': instance.formattedAnswer,
       'validation': instance.validation,
       'questionMetadata': instance.questionMetadata,

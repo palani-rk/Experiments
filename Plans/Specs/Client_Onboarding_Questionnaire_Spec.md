@@ -12,17 +12,17 @@ Conversational-style questionnaire interface that combines chat UX with structur
 
 ## User Experience Flow
 
-### Opening Sequence
+### Welcome Screen
 ```
-BOT: Hi [CLIENT_NAME]! 👋 I'm here to help [NUTRITIONIST_NAME] create the perfect nutrition plan for you.
+ Hi [CLIENT_NAME]! 👋 I'm here to help [NUTRITIONIST_NAME] create the perfect nutrition plan for you.
 
-BOT: This will take just 5-10 minutes and covers 4 areas:
+ This will take just 5-10 minutes and covers 4 areas:
      • Personal Info (2 mins)
      • Your Goals (2 mins) 
      • Health Background (3 mins)
      • Lifestyle (3 mins)
 
-BOT: Ready to get started? 
+Ready to get started? 
      [Yes, let's do this!] [I have questions first]
 ```
 

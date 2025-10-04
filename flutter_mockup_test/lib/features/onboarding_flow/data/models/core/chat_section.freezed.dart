@@ -33,6 +33,7 @@ mixin _$ChatSection {
   String get title => throw _privateConstructorUsedError;
   SectionType get sectionType => throw _privateConstructorUsedError;
   SectionStatus get status => throw _privateConstructorUsedError;
+  int get order => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime? get completedAt => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -43,6 +44,7 @@ mixin _$ChatSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)
         intro,
@@ -54,6 +56,7 @@ mixin _$ChatSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)
         questionnaire,
@@ -67,6 +70,7 @@ mixin _$ChatSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         intro,
@@ -78,6 +82,7 @@ mixin _$ChatSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         questionnaire,
@@ -91,6 +96,7 @@ mixin _$ChatSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         intro,
@@ -102,6 +108,7 @@ mixin _$ChatSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         questionnaire,
@@ -149,6 +156,7 @@ abstract class $ChatSectionCopyWith<$Res> {
       String title,
       SectionType sectionType,
       SectionStatus status,
+      int order,
       DateTime createdAt,
       DateTime? completedAt});
 }
@@ -172,6 +180,7 @@ class _$ChatSectionCopyWithImpl<$Res, $Val extends ChatSection>
     Object? title = null,
     Object? sectionType = null,
     Object? status = null,
+    Object? order = null,
     Object? createdAt = null,
     Object? completedAt = freezed,
   }) {
@@ -192,6 +201,10 @@ class _$ChatSectionCopyWithImpl<$Res, $Val extends ChatSection>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SectionStatus,
+      order: null == order
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -218,6 +231,7 @@ abstract class _$$IntroSectionImplCopyWith<$Res>
       List<BotMessage> welcomeMessages,
       SectionType sectionType,
       SectionStatus status,
+      int order,
       DateTime createdAt,
       DateTime? completedAt});
 }
@@ -240,6 +254,7 @@ class __$$IntroSectionImplCopyWithImpl<$Res>
     Object? welcomeMessages = null,
     Object? sectionType = null,
     Object? status = null,
+    Object? order = null,
     Object? createdAt = null,
     Object? completedAt = freezed,
   }) {
@@ -264,6 +279,10 @@ class __$$IntroSectionImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SectionStatus,
+      order: null == order
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -285,6 +304,7 @@ class _$IntroSectionImpl implements IntroSection {
       required final List<BotMessage> welcomeMessages,
       this.sectionType = SectionType.intro,
       this.status = SectionStatus.completed,
+      this.order = 0,
       required this.createdAt,
       this.completedAt,
       final String? $type})
@@ -313,6 +333,9 @@ class _$IntroSectionImpl implements IntroSection {
   @JsonKey()
   final SectionStatus status;
   @override
+  @JsonKey()
+  final int order;
+  @override
   final DateTime createdAt;
   @override
   final DateTime? completedAt;
@@ -322,7 +345,7 @@ class _$IntroSectionImpl implements IntroSection {
 
   @override
   String toString() {
-    return 'ChatSection.intro(id: $id, title: $title, welcomeMessages: $welcomeMessages, sectionType: $sectionType, status: $status, createdAt: $createdAt, completedAt: $completedAt)';
+    return 'ChatSection.intro(id: $id, title: $title, welcomeMessages: $welcomeMessages, sectionType: $sectionType, status: $status, order: $order, createdAt: $createdAt, completedAt: $completedAt)';
   }
 
   @override
@@ -337,6 +360,7 @@ class _$IntroSectionImpl implements IntroSection {
             (identical(other.sectionType, sectionType) ||
                 other.sectionType == sectionType) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.order, order) || other.order == order) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.completedAt, completedAt) ||
@@ -352,6 +376,7 @@ class _$IntroSectionImpl implements IntroSection {
       const DeepCollectionEquality().hash(_welcomeMessages),
       sectionType,
       status,
+      order,
       createdAt,
       completedAt);
 
@@ -372,6 +397,7 @@ class _$IntroSectionImpl implements IntroSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)
         intro,
@@ -383,12 +409,13 @@ class _$IntroSectionImpl implements IntroSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)
         questionnaire,
   }) {
-    return intro(id, title, welcomeMessages, sectionType, status, createdAt,
-        completedAt);
+    return intro(id, title, welcomeMessages, sectionType, status, order,
+        createdAt, completedAt);
   }
 
   @override
@@ -400,6 +427,7 @@ class _$IntroSectionImpl implements IntroSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         intro,
@@ -411,11 +439,12 @@ class _$IntroSectionImpl implements IntroSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         questionnaire,
   }) {
-    return intro?.call(id, title, welcomeMessages, sectionType, status,
+    return intro?.call(id, title, welcomeMessages, sectionType, status, order,
         createdAt, completedAt);
   }
 
@@ -428,6 +457,7 @@ class _$IntroSectionImpl implements IntroSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         intro,
@@ -439,14 +469,15 @@ class _$IntroSectionImpl implements IntroSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         questionnaire,
     required TResult orElse(),
   }) {
     if (intro != null) {
-      return intro(id, title, welcomeMessages, sectionType, status, createdAt,
-          completedAt);
+      return intro(id, title, welcomeMessages, sectionType, status, order,
+          createdAt, completedAt);
     }
     return orElse();
   }
@@ -497,6 +528,7 @@ abstract class IntroSection implements ChatSection {
       required final List<BotMessage> welcomeMessages,
       final SectionType sectionType,
       final SectionStatus status,
+      final int order,
       required final DateTime createdAt,
       final DateTime? completedAt}) = _$IntroSectionImpl;
 
@@ -512,6 +544,8 @@ abstract class IntroSection implements ChatSection {
   SectionType get sectionType;
   @override
   SectionStatus get status;
+  @override
+  int get order;
   @override
   DateTime get createdAt;
   @override
@@ -541,6 +575,7 @@ abstract class _$$QuestionnaireSectionImplCopyWith<$Res>
       List<SectionMessage> messages,
       SectionType sectionType,
       SectionStatus status,
+      int order,
       DateTime createdAt,
       DateTime? completedAt});
 }
@@ -565,6 +600,7 @@ class __$$QuestionnaireSectionImplCopyWithImpl<$Res>
     Object? messages = null,
     Object? sectionType = null,
     Object? status = null,
+    Object? order = null,
     Object? createdAt = null,
     Object? completedAt = freezed,
   }) {
@@ -597,6 +633,10 @@ class __$$QuestionnaireSectionImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as SectionStatus,
+      order: null == order
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -620,6 +660,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
       final List<SectionMessage> messages = const [],
       this.sectionType = SectionType.questionnaire,
       this.status = SectionStatus.pending,
+      this.order = 0,
       required this.createdAt,
       this.completedAt,
       final String? $type})
@@ -660,6 +701,9 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
   @JsonKey()
   final SectionStatus status;
   @override
+  @JsonKey()
+  final int order;
+  @override
   final DateTime createdAt;
   @override
   final DateTime? completedAt;
@@ -669,7 +713,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
 
   @override
   String toString() {
-    return 'ChatSection.questionnaire(id: $id, title: $title, description: $description, questions: $questions, messages: $messages, sectionType: $sectionType, status: $status, createdAt: $createdAt, completedAt: $completedAt)';
+    return 'ChatSection.questionnaire(id: $id, title: $title, description: $description, questions: $questions, messages: $messages, sectionType: $sectionType, status: $status, order: $order, createdAt: $createdAt, completedAt: $completedAt)';
   }
 
   @override
@@ -687,6 +731,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
             (identical(other.sectionType, sectionType) ||
                 other.sectionType == sectionType) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.order, order) || other.order == order) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.completedAt, completedAt) ||
@@ -704,6 +749,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
       const DeepCollectionEquality().hash(_messages),
       sectionType,
       status,
+      order,
       createdAt,
       completedAt);
 
@@ -726,6 +772,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)
         intro,
@@ -737,12 +784,13 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)
         questionnaire,
   }) {
     return questionnaire(id, title, description, questions, messages,
-        sectionType, status, createdAt, completedAt);
+        sectionType, status, order, createdAt, completedAt);
   }
 
   @override
@@ -754,6 +802,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         intro,
@@ -765,12 +814,13 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         questionnaire,
   }) {
     return questionnaire?.call(id, title, description, questions, messages,
-        sectionType, status, createdAt, completedAt);
+        sectionType, status, order, createdAt, completedAt);
   }
 
   @override
@@ -782,6 +832,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
             List<BotMessage> welcomeMessages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         intro,
@@ -793,6 +844,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
             List<SectionMessage> messages,
             SectionType sectionType,
             SectionStatus status,
+            int order,
             DateTime createdAt,
             DateTime? completedAt)?
         questionnaire,
@@ -800,7 +852,7 @@ class _$QuestionnaireSectionImpl implements QuestionnaireSection {
   }) {
     if (questionnaire != null) {
       return questionnaire(id, title, description, questions, messages,
-          sectionType, status, createdAt, completedAt);
+          sectionType, status, order, createdAt, completedAt);
     }
     return orElse();
   }
@@ -853,6 +905,7 @@ abstract class QuestionnaireSection implements ChatSection {
       final List<SectionMessage> messages,
       final SectionType sectionType,
       final SectionStatus status,
+      final int order,
       required final DateTime createdAt,
       final DateTime? completedAt}) = _$QuestionnaireSectionImpl;
 
@@ -870,6 +923,8 @@ abstract class QuestionnaireSection implements ChatSection {
   SectionType get sectionType;
   @override
   SectionStatus get status;
+  @override
+  int get order;
   @override
   DateTime get createdAt;
   @override

@@ -34,6 +34,7 @@ mixin _$SectionMessage {
   MessageType get messageType => throw _privateConstructorUsedError;
   DateTime get timestamp => throw _privateConstructorUsedError;
   bool get isEditable => throw _privateConstructorUsedError;
+  int get order => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -43,6 +44,7 @@ mixin _$SectionMessage {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)
         bot,
@@ -56,6 +58,8 @@ mixin _$SectionMessage {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)
@@ -71,6 +75,7 @@ mixin _$SectionMessage {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)?
         bot,
@@ -84,6 +89,8 @@ mixin _$SectionMessage {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)?
@@ -99,6 +106,7 @@ mixin _$SectionMessage {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)?
         bot,
@@ -112,6 +120,8 @@ mixin _$SectionMessage {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)?
@@ -160,7 +170,8 @@ abstract class $SectionMessageCopyWith<$Res> {
       String sectionId,
       MessageType messageType,
       DateTime timestamp,
-      bool isEditable});
+      bool isEditable,
+      int order});
 }
 
 /// @nodoc
@@ -183,6 +194,7 @@ class _$SectionMessageCopyWithImpl<$Res, $Val extends SectionMessage>
     Object? messageType = null,
     Object? timestamp = null,
     Object? isEditable = null,
+    Object? order = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -205,6 +217,10 @@ class _$SectionMessageCopyWithImpl<$Res, $Val extends SectionMessage>
           ? _value.isEditable
           : isEditable // ignore: cast_nullable_to_non_nullable
               as bool,
+      order: null == order
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -224,6 +240,7 @@ abstract class _$$BotMessageImplCopyWith<$Res>
       MessageType messageType,
       DateTime timestamp,
       bool isEditable,
+      int order,
       String? context,
       Map<String, dynamic>? metadata});
 }
@@ -247,6 +264,7 @@ class __$$BotMessageImplCopyWithImpl<$Res>
     Object? messageType = null,
     Object? timestamp = null,
     Object? isEditable = null,
+    Object? order = null,
     Object? context = freezed,
     Object? metadata = freezed,
   }) {
@@ -275,6 +293,10 @@ class __$$BotMessageImplCopyWithImpl<$Res>
           ? _value.isEditable
           : isEditable // ignore: cast_nullable_to_non_nullable
               as bool,
+      order: null == order
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
       context: freezed == context
           ? _value.context
           : context // ignore: cast_nullable_to_non_nullable
@@ -297,6 +319,7 @@ class _$BotMessageImpl implements BotMessage {
       required this.messageType,
       required this.timestamp,
       this.isEditable = false,
+      this.order = 0,
       this.context,
       final Map<String, dynamic>? metadata,
       final String? $type})
@@ -320,6 +343,9 @@ class _$BotMessageImpl implements BotMessage {
   @JsonKey()
   final bool isEditable;
   @override
+  @JsonKey()
+  final int order;
+  @override
   final String? context;
   final Map<String, dynamic>? _metadata;
   @override
@@ -336,7 +362,7 @@ class _$BotMessageImpl implements BotMessage {
 
   @override
   String toString() {
-    return 'SectionMessage.bot(id: $id, sectionId: $sectionId, content: $content, messageType: $messageType, timestamp: $timestamp, isEditable: $isEditable, context: $context, metadata: $metadata)';
+    return 'SectionMessage.bot(id: $id, sectionId: $sectionId, content: $content, messageType: $messageType, timestamp: $timestamp, isEditable: $isEditable, order: $order, context: $context, metadata: $metadata)';
   }
 
   @override
@@ -354,6 +380,7 @@ class _$BotMessageImpl implements BotMessage {
                 other.timestamp == timestamp) &&
             (identical(other.isEditable, isEditable) ||
                 other.isEditable == isEditable) &&
+            (identical(other.order, order) || other.order == order) &&
             (identical(other.context, context) || other.context == context) &&
             const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
@@ -368,6 +395,7 @@ class _$BotMessageImpl implements BotMessage {
       messageType,
       timestamp,
       isEditable,
+      order,
       context,
       const DeepCollectionEquality().hash(_metadata));
 
@@ -389,6 +417,7 @@ class _$BotMessageImpl implements BotMessage {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)
         bot,
@@ -402,13 +431,15 @@ class _$BotMessageImpl implements BotMessage {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)
         questionAnswer,
   }) {
     return bot(id, sectionId, content, messageType, timestamp, isEditable,
-        context, metadata);
+        order, context, metadata);
   }
 
   @override
@@ -421,6 +452,7 @@ class _$BotMessageImpl implements BotMessage {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)?
         bot,
@@ -434,13 +466,15 @@ class _$BotMessageImpl implements BotMessage {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)?
         questionAnswer,
   }) {
     return bot?.call(id, sectionId, content, messageType, timestamp, isEditable,
-        context, metadata);
+        order, context, metadata);
   }
 
   @override
@@ -453,6 +487,7 @@ class _$BotMessageImpl implements BotMessage {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)?
         bot,
@@ -466,6 +501,8 @@ class _$BotMessageImpl implements BotMessage {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)?
@@ -474,7 +511,7 @@ class _$BotMessageImpl implements BotMessage {
   }) {
     if (bot != null) {
       return bot(id, sectionId, content, messageType, timestamp, isEditable,
-          context, metadata);
+          order, context, metadata);
     }
     return orElse();
   }
@@ -526,6 +563,7 @@ abstract class BotMessage implements SectionMessage {
       required final MessageType messageType,
       required final DateTime timestamp,
       final bool isEditable,
+      final int order,
       final String? context,
       final Map<String, dynamic>? metadata}) = _$BotMessageImpl;
 
@@ -543,6 +581,8 @@ abstract class BotMessage implements SectionMessage {
   DateTime get timestamp;
   @override
   bool get isEditable;
+  @override
+  int get order;
   String? get context;
   Map<String, dynamic>? get metadata;
 
@@ -572,6 +612,8 @@ abstract class _$$QuestionAnswerImplCopyWith<$Res>
       DateTime timestamp,
       MessageType messageType,
       bool isEditable,
+      bool isComplete,
+      int order,
       String? formattedAnswer,
       ValidationStatus? validation,
       Map<String, dynamic>? questionMetadata});
@@ -601,6 +643,8 @@ class __$$QuestionAnswerImplCopyWithImpl<$Res>
     Object? timestamp = null,
     Object? messageType = null,
     Object? isEditable = null,
+    Object? isComplete = null,
+    Object? order = null,
     Object? formattedAnswer = freezed,
     Object? validation = freezed,
     Object? questionMetadata = freezed,
@@ -642,6 +686,14 @@ class __$$QuestionAnswerImplCopyWithImpl<$Res>
           ? _value.isEditable
           : isEditable // ignore: cast_nullable_to_non_nullable
               as bool,
+      isComplete: null == isComplete
+          ? _value.isComplete
+          : isComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
+      order: null == order
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
       formattedAnswer: freezed == formattedAnswer
           ? _value.formattedAnswer
           : formattedAnswer // ignore: cast_nullable_to_non_nullable
@@ -685,6 +737,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
       required this.timestamp,
       this.messageType = MessageType.userAnswer,
       this.isEditable = true,
+      this.isComplete = false,
+      this.order = 0,
       this.formattedAnswer,
       this.validation,
       final Map<String, dynamic>? questionMetadata,
@@ -716,6 +770,12 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
   @JsonKey()
   final bool isEditable;
   @override
+  @JsonKey()
+  final bool isComplete;
+  @override
+  @JsonKey()
+  final int order;
+  @override
   final String? formattedAnswer;
   @override
   final ValidationStatus? validation;
@@ -734,7 +794,7 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
 
   @override
   String toString() {
-    return 'SectionMessage.questionAnswer(id: $id, sectionId: $sectionId, questionId: $questionId, questionText: $questionText, inputType: $inputType, answer: $answer, timestamp: $timestamp, messageType: $messageType, isEditable: $isEditable, formattedAnswer: $formattedAnswer, validation: $validation, questionMetadata: $questionMetadata)';
+    return 'SectionMessage.questionAnswer(id: $id, sectionId: $sectionId, questionId: $questionId, questionText: $questionText, inputType: $inputType, answer: $answer, timestamp: $timestamp, messageType: $messageType, isEditable: $isEditable, isComplete: $isComplete, order: $order, formattedAnswer: $formattedAnswer, validation: $validation, questionMetadata: $questionMetadata)';
   }
 
   @override
@@ -758,6 +818,9 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
                 other.messageType == messageType) &&
             (identical(other.isEditable, isEditable) ||
                 other.isEditable == isEditable) &&
+            (identical(other.isComplete, isComplete) ||
+                other.isComplete == isComplete) &&
+            (identical(other.order, order) || other.order == order) &&
             (identical(other.formattedAnswer, formattedAnswer) ||
                 other.formattedAnswer == formattedAnswer) &&
             (identical(other.validation, validation) ||
@@ -779,6 +842,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
       timestamp,
       messageType,
       isEditable,
+      isComplete,
+      order,
       formattedAnswer,
       validation,
       const DeepCollectionEquality().hash(_questionMetadata));
@@ -802,6 +867,7 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)
         bot,
@@ -815,6 +881,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)
@@ -830,6 +898,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
         timestamp,
         messageType,
         isEditable,
+        isComplete,
+        order,
         formattedAnswer,
         validation,
         questionMetadata);
@@ -845,6 +915,7 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)?
         bot,
@@ -858,6 +929,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)?
@@ -873,6 +946,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
         timestamp,
         messageType,
         isEditable,
+        isComplete,
+        order,
         formattedAnswer,
         validation,
         questionMetadata);
@@ -888,6 +963,7 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
             MessageType messageType,
             DateTime timestamp,
             bool isEditable,
+            int order,
             String? context,
             Map<String, dynamic>? metadata)?
         bot,
@@ -901,6 +977,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
             DateTime timestamp,
             MessageType messageType,
             bool isEditable,
+            bool isComplete,
+            int order,
             String? formattedAnswer,
             ValidationStatus? validation,
             Map<String, dynamic>? questionMetadata)?
@@ -918,6 +996,8 @@ class _$QuestionAnswerImpl implements QuestionAnswer {
           timestamp,
           messageType,
           isEditable,
+          isComplete,
+          order,
           formattedAnswer,
           validation,
           questionMetadata);
@@ -975,6 +1055,8 @@ abstract class QuestionAnswer implements SectionMessage {
       required final DateTime timestamp,
       final MessageType messageType,
       final bool isEditable,
+      final bool isComplete,
+      final int order,
       final String? formattedAnswer,
       final ValidationStatus? validation,
       final Map<String, dynamic>? questionMetadata}) = _$QuestionAnswerImpl;
@@ -996,6 +1078,9 @@ abstract class QuestionAnswer implements SectionMessage {
   MessageType get messageType;
   @override
   bool get isEditable;
+  bool get isComplete;
+  @override
+  int get order;
   String? get formattedAnswer;
   ValidationStatus? get validation;
   Map<String, dynamic>? get questionMetadata;

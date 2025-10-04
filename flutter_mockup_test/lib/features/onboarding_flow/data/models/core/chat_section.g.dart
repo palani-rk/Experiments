@@ -18,6 +18,7 @@ _$IntroSectionImpl _$$IntroSectionImplFromJson(Map<String, dynamic> json) =>
               SectionType.intro,
       status: $enumDecodeNullable(_$SectionStatusEnumMap, json['status']) ??
           SectionStatus.completed,
+      order: (json['order'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['createdAt'] as String),
       completedAt: json['completedAt'] == null
           ? null
@@ -32,6 +33,7 @@ Map<String, dynamic> _$$IntroSectionImplToJson(_$IntroSectionImpl instance) =>
       'welcomeMessages': instance.welcomeMessages,
       'sectionType': _$SectionTypeEnumMap[instance.sectionType]!,
       'status': _$SectionStatusEnumMap[instance.status]!,
+      'order': instance.order,
       'createdAt': instance.createdAt.toIso8601String(),
       'completedAt': instance.completedAt?.toIso8601String(),
       'runtimeType': instance.$type,
@@ -70,6 +72,7 @@ _$QuestionnaireSectionImpl _$$QuestionnaireSectionImplFromJson(
               SectionType.questionnaire,
       status: $enumDecodeNullable(_$SectionStatusEnumMap, json['status']) ??
           SectionStatus.pending,
+      order: (json['order'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['createdAt'] as String),
       completedAt: json['completedAt'] == null
           ? null
@@ -87,6 +90,7 @@ Map<String, dynamic> _$$QuestionnaireSectionImplToJson(
       'messages': instance.messages,
       'sectionType': _$SectionTypeEnumMap[instance.sectionType]!,
       'status': _$SectionStatusEnumMap[instance.status]!,
+      'order': instance.order,
       'createdAt': instance.createdAt.toIso8601String(),
       'completedAt': instance.completedAt?.toIso8601String(),
       'runtimeType': instance.$type,
